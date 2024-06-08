@@ -14,4 +14,6 @@ public partial class Book
     public int? Year { get; set; }
 
     public virtual ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
+
+    public virtual ICollection<BookGenre> BookGenres { get; set; } = new List<BookGenre>();
 }

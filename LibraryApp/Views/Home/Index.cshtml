@@ -64,7 +64,19 @@
                     <td>@book.BookId</td>
                     <td>@book.Name</td>
                     <td>@book.Year</td>
-                    <td>@book.Genre</td>
+                    <td>
+                        @foreach (var genre in book.Genres)
+                        {
+                            <span>
+                                @genre.Name 
+                                @if (genre != book.Genres.LastOrDefault())
+                                {
+                                    <text>,</text>
+                                }
+                            </span>
+                        }
+
+                    </td>
                     <td>
                         @foreach (var author in book.Authors)
                         {

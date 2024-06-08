@@ -4,14 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using LibraryApp.Models.Book;
 using LibraryApp.Models.Author;
 using X.PagedList;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Http.Extensions;
-using System.Net;
-using System.Web;
 using LibraryApp.Database;
-using LibraryApp.Models.Book;
 
 namespace LibraryApp.Controllers
 {
@@ -22,7 +16,8 @@ namespace LibraryApp.Controllers
 			LibraryContext context = new LibraryContext();
 
 			var queryResult = context.Books
-				//.Include(x => x.Genre)
+				.Include(x => x.BookGenres)
+				.ThenInclude(x => x.Genre)
 				.Include(x => x.BookAuthors)
 				.ThenInclude(x => x.Author)
 				.AsQueryable();
@@ -51,7 +46,10 @@ namespace LibraryApp.Controllers
 				BookId = x.BookId,
 				Name = x.Name,
 				Year = x.Year,
-				//Genre = x.Genre.Name,
+				Genres = x.BookGenres.Select(g => new GenreViewModel()
+				{
+					Name = g.Genre.Name
+				}).ToList(),
 				Authors = x.BookAuthors.Select(a => new AuthorViewModel()
 				{
 					Firstname = a.Author.Firstname,

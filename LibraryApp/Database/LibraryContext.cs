@@ -66,9 +66,32 @@ public partial class LibraryContext : DbContext
 
         modelBuilder.Entity<BookGenre>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("BookGenre");
+            //entity
+            //    .HasNoKey()
+            //    .ToTable("BookGenre");
+
+            //entity.HasOne(d => d.Book).WithMany()
+            //    .HasForeignKey(d => d.BookId)
+            //    .HasConstraintName("FK_BookGenre_Book");
+
+            //entity.HasOne(d => d.Genre).WithMany()
+            //    .HasForeignKey(d => d.GenreId)
+            //    .HasConstraintName("FK_BookGenre_Genre");
+
+            //Had to map manually due to some mistake which can be observed above )
+            entity.ToTable("BookGenre");
+
+            entity.HasIndex(e => e.GenreId, "IX_BookGenre_GenreId");
+
+            entity.HasIndex(e => e.BookId, "IX_BookGenre_BookId");
+
+            entity.HasOne(d => d.Genre).WithMany(p => p.BookGenres)
+                .HasForeignKey(d => d.GenreId)
+                .HasConstraintName("FK_BookGenre_GenreId");
+
+            entity.HasOne(d => d.Book).WithMany(p => p.BookGenres)
+                .HasForeignKey(d => d.BookId)
+                .HasConstraintName("FK_BookGenre_BookId");
         });
 
         modelBuilder.Entity<Genre>(entity =>
