@@ -16,6 +16,9 @@ namespace LibraryApp.Models.Book
 
 		public virtual Genre? Genre { get; set; }
 
+		public List<int>? SelectedGenreIds { get; set; }
+		public IEnumerable<SelectListItem>? GenreSelectList { get; set; }
+
 		//public virtual ICollection<BookAuthor> BookAuthors { get; set; }
 	}
 

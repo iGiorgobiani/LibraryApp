@@ -36,11 +36,11 @@
 				@Html.ValidationMessageFor(x => x.GenreId, null, new { @class = "text-danger" })
 			</div> *@
 
-			<div class="col-md-5" finput>
+@* 			<div class="col-md-5" finput>
 				@Html.LabelFor(x => x.GenreId, "Genre")
 				@Html.DropDownListFor(x => x.GenreId, (IEnumerable<SelectListItem>)ViewBag.GenreSelectList, "Select Genre", new { @class = "form-control" })
 				@Html.ValidationMessageFor(x => x.GenreId, null, new { @class = "text-danger" })
-			</div>
+			</div> *@
 
 			<div class="col-md-5">
 				<input type="submit" class="btn btn-primary" value="Update" />

@@ -20,12 +20,18 @@
 				@Html.TextBoxFor(x => x.Year, new { @class = "form-control", @type = "number", @maxLength = "10", @placeholder = "Enter publishing year" })
 				@Html.ValidationMessageFor(x => x.Year, null, new { @class = "text-danger" })
 			</div>
+@* 
+			<div class="form-group">
+				@Html.LabelFor(m => m.SelectedGenreIds, "Genres", new { @class = "control-label" })
+				@Html.ListBoxFor(m => m.SelectedGenreIds, new MultiSelectList(Model.GenreSelectList, "Value", "Text", ViewBag.SelectedGenreIds), new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.SelectedGenreIds, "", new { @class = "text-danger" })
+			</div> *@
 
-			<div class="col-md-5" finput>
-				<label for="Genre_Name">Genre</label> @*უკეთესი ვარიანტები არის ამის სახელის შეცვლის?*@
-				@Html.TextBoxFor(x => x.Genre.Name, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter genre" })
-				@Html.ValidationMessageFor(x => x.Genre.Name, null, new { @class = "text-danger" })
-			</div>
+						<div class="col-md-5" finput>
+				@Html.LabelFor(x => x.SelectedGenreIds)
+				@Html.DropDownListFor(x => x.SelectedGenreIds, (IEnumerable<SelectListItem>)ViewBag.GenreSelectList, "Select Genre", new { @class = "form-control" })
+				@Html.ValidationMessageFor(x => x.SelectedGenreIds, null, new { @class = "text-danger" })
+		</div>
 
 
 			<div class="col-md-5">

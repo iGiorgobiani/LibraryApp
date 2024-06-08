@@ -10,11 +10,12 @@ namespace LibraryApp.Models.Book
 		public string Name { get; set; } = null!;
 		public int? Pages { get; set; }
 		public int? Year { get; set; }
-		public int? GenreId { get; set; }
+		public List<BookGenreModel> Genres { get; set; }
 
-		//public IEnumerable<SelectListItem> Genres { get; set; }
-
-		//public virtual Genre? Genre { get; set; }
-		//public virtual ICollection<BookAuthor> BookAuthors { get; set; }
 	}
+}
+
+public class BookGenreModel
+{
+	public string Name { get; set; }
 }

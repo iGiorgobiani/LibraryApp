@@ -62,7 +62,23 @@ namespace LibraryApp.Controllers
 
 		public IActionResult AddBook()
 		{
+			LibraryContext context = new LibraryContext();
 
+			//ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
+
+			var model = new AddBookModel
+			{
+				GenreSelectList = context.Genres.Select(g => new System.Web.Mvc.SelectListItem
+				{
+					Value = g.GenreId.ToString(),
+					Text = g.Name
+				}).ToList(),
+				SelectedGenreIds = new List<int>() // Initializing SelectedGenreIds to an empty list
+			};
+
+			ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
+			//ViewBag.GenreSelectList = model.GenreSelectList; // Assign GenreSelectList to ViewBag
+			ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
 
 			return View();
 		}
@@ -70,11 +86,12 @@ namespace LibraryApp.Controllers
 		[HttpPost]
 		public IActionResult AddBook(AddBookModel model)
 		{
-
+			LibraryContext context = new LibraryContext();
+			ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
+			//ViewBag.GenreSelectList = model.GenreSelectList; // Assign GenreSelectList to ViewBag
+			ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
 			if (ModelState.IsValid)
 			{
-				LibraryContext context = new LibraryContext();
-
 				var queryResult = context.Books
 				//.Include(x => x.Genre)
 				.Include(x => x.BookAuthors)
@@ -82,16 +99,31 @@ namespace LibraryApp.Controllers
 				.AsQueryable();
 
 
-				context.Books.Add(new Book()
+				var book = new Book
 				{
 					Name = model.Name,
 					Year = model.Year,
-					//Genre = model.Genre
-				});
+				};
+				context.Books.Add(book);
 				context.SaveChanges();
 
+				foreach (var genreId in model.SelectedGenreIds)
+				{
+					Random random = new Random();
+					var bookGenre = new BookGenre
+					{
+						BookGenreId = random.Next(),
+						BookId = book.BookId,
+						GenreId = genreId
+					};
+					context.BookGenres.Add(bookGenre);
+					context.SaveChanges();
+				}
+
 				return RedirectToAction("Index");
+
 			}
+
 			return View(model);
 		}
 
