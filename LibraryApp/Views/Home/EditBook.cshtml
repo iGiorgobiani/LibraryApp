@@ -1,0 +1,52 @@
+﻿@model LibraryApp.Models.Book.EditBookModel
+
+
+
+
+<div>
+	<div>
+		<h2>Edit book</h2>
+	</div>
+
+	<div>
+		@using (Html.BeginForm("EditBook", "Home", FormMethod.Post))
+		{
+			@Html.HiddenFor(x => x.BookId)
+			<div class="col-md-5" finput>
+				@Html.LabelFor(x => x.Name)
+				@Html.TextBoxFor(x => x.Name, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter book name" })
+				@Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
+			</div>
+
+			<div class="col-md-5" finput>
+				@Html.LabelFor(x => x.Year)
+				@Html.TextBoxFor(x => x.Year, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter year of publishing" })
+				@Html.ValidationMessageFor(x => x.Year, null, new { @class = "text-danger" })
+			</div>
+
+			<div class="col-md-5" finput>
+				@Html.LabelFor(x => x.Pages)
+				@Html.TextBoxFor(x => x.Pages, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter amount of pages" })
+				@Html.ValidationMessageFor(x => x.Pages, null, new { @class = "text-danger" })
+			</div>
+
+@* 			<div class="col-md-5" finput>
+				@Html.LabelFor(x => x.GenreId)
+				@Html.TextBoxFor(x => x.GenreId, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter genre" })
+				@Html.ValidationMessageFor(x => x.GenreId, null, new { @class = "text-danger" })
+			</div> *@
+
+			<div class="col-md-5" finput>
+				@Html.LabelFor(x => x.GenreId, "Genre")
+				@Html.DropDownListFor(x => x.GenreId, (IEnumerable<SelectListItem>)ViewBag.GenreSelectList, "Select Genre", new { @class = "form-control" })
+				@Html.ValidationMessageFor(x => x.GenreId, null, new { @class = "text-danger" })
+			</div>
+
+			<div class="col-md-5">
+				<input type="submit" class="btn btn-primary" value="Update" />
+			</div>
+
+
+		}
+	</div>
+</div>

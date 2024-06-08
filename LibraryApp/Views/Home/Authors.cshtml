@@ -1,0 +1,133 @@
+﻿@model LibraryApp.Models.Author.AuthorsViewModel
+@using X.PagedList;
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Mvc.Core.Fluent
+@using X.PagedList.Web.Common
+
+
+
+
+<style>
+    .filters {
+        margin-left: 20px;
+    }
+
+    .filterBtn {
+        margin-top: 24px;
+    }
+</style>
+
+<div> 
+	<div>
+		<h2>Authors</h2>
+	</div>
+    <div>
+        @using (Html.BeginForm("Authors", "Home", FormMethod.Get))
+        {
+            <div class="d-flex">
+                <div class="col-md-2">
+                    @Html.LabelFor(x => x.Firstname)
+                    @Html.TextBoxFor(x => x.Firstname, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 filters">
+                    @Html.LabelFor(x => x.Lastname)
+                    @Html.TextBoxFor(x => x.Lastname, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 filters filterBtn">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                </div>
+            </div>
+        }
+        <br>
+        <div>
+            <a type="button" class="btn btn-primary" href="@Url.Action("AddAuthor", "Home")">Add new item</a>
+        </div>
+        <br>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Birthdate</th>
+                    <th>Booknumber</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var author in Model.Authors)
+                {
+                    <tr>
+                        <td>@author.AuthorId</td>
+                        <td>@author.Firstname</td>
+                        <td>@author.Lastname</td>
+                        <td>@String.Format("{0: dd/MM/yyyy}", author.Birthdate)</td>
+                        <td>@author.Booknumber</td>
+                        <td>
+                            <a class="btn btn-primary" href="@Url.Action("EditAuthor", "Home", new { authorId = author.AuthorId} )">Edit</a>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-danger" data-authorid="@author.AuthorId" onclick="tryRemoveAuthor(this)">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="d-flex" style="justify-content: space-between;">
+            <div class="registry-paging jacob">
+                @Html.PagedListPager(Model.Authors, page => Url.Action("Authors", new { Model.Firstname, Model.Lastname, page}), new PagedListRenderOptions { LiElementClasses = new string[] { "page-item" }, PageClasses = new string[] { "page-link" }, ActiveLiElementClass = "active-link-cl" })
+            </div>
+            <div style="margin-top: 50px; margin-right: 35px;">
+                <h5>სულ : @Model.Total</h5>
+            </div>
+        </div>
+                 
+
+    </div>
+</div>
+
+<!-- data-bs-toggle="modal" data-bs-target="#deleteModal -->
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Author</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete author?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" onclick="removeAuthor()" id="removeAuthor">Yes</button>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<script>
+    
+    let removeAuthorId = 0;
+
+    let tryRemoveAuthor = (element) => {
+        removeAuthorId = element.dataset.authorid;
+        let deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'), {
+            keyboard: false
+        })
+        deleteModal.show();
+    };
+    let removeAuthor = () => {
+        if (removeAuthorId == 0) 
+        { 
+            alert("Can't remove item");
+            return;
+        }
+        
+        let newUrl = '@Url.Action("RemoveAuthor", "Home")' + '?AuthorId=' + removeAuthorId;
+        window.location.href = newUrl;
+    }
+
+</script>
