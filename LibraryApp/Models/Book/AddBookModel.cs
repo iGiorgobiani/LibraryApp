@@ -14,13 +14,10 @@ namespace LibraryApp.Models.Book
         [Range(0, 9999, ErrorMessage = "To long to be true - maximum {1} characters")]
         public int? Year { get; set; }
 
-		public virtual Genre? Genre { get; set; }
+        public virtual Genre? Genre { get; set; }
 
-		public List<int>? SelectedGenreIds { get; set; }
-		public IEnumerable<SelectListItem>? GenreSelectList { get; set; }
-
-		//public virtual ICollection<BookAuthor> BookAuthors { get; set; }
-	}
-
+        public List<int>? SelectedGenreIds { get; set; }
+        public IEnumerable<SelectListItem>? GenreSelectList { get; set; }
+    }
 }
 

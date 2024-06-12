@@ -10,7 +10,7 @@ namespace LibraryApp.Models.Book
 		public string Name { get; set; } = null!;
 		public int? Pages { get; set; }
 		public int? Year { get; set; }
-		public List<BookGenreModel> Genres { get; set; }
+		public List<BookGenreModel>? Genres { get; set; }
 
 	}
 }

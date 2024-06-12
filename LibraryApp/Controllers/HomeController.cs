@@ -64,8 +64,6 @@ namespace LibraryApp.Controllers
 		{
 			LibraryContext context = new LibraryContext();
 
-			//ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
-
 			var model = new AddBookModel
 			{
 				GenreSelectList = context.Genres.Select(g => new System.Web.Mvc.SelectListItem
@@ -77,10 +75,17 @@ namespace LibraryApp.Controllers
 			};
 
 			ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
-			//ViewBag.GenreSelectList = model.GenreSelectList; // Assign GenreSelectList to ViewBag
 			ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
 
 			return View();
+		}
+
+		[HttpGet]
+		public IActionResult GetGenres()
+		{
+			LibraryContext context = new LibraryContext();
+			var genres = context.Genres.Select(g => g.Name).ToList();
+			return Ok(genres);
 		}
 
 		[HttpPost]
@@ -88,12 +93,13 @@ namespace LibraryApp.Controllers
 		{
 			LibraryContext context = new LibraryContext();
 			ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
-			//ViewBag.GenreSelectList = model.GenreSelectList; // Assign GenreSelectList to ViewBag
-			ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
+			ViewBag.SelectedGenreIds = model.SelectedGenreIds; 
+
+
 			if (ModelState.IsValid)
 			{
 				var queryResult = context.Books
-				//.Include(x => x.Genre)
+				.Include(x => x.BookGenres)
 				.Include(x => x.BookAuthors)
 				.ThenInclude(x => x.Author)
 				.AsQueryable();
@@ -103,25 +109,22 @@ namespace LibraryApp.Controllers
 				{
 					Name = model.Name,
 					Year = model.Year,
+					BookGenres = new List<BookGenre>()
 				};
-				context.Books.Add(book);
-				context.SaveChanges();
 
 				foreach (var genreId in model.SelectedGenreIds)
 				{
-					Random random = new Random();
 					var bookGenre = new BookGenre
 					{
-						BookGenreId = random.Next(),
 						BookId = book.BookId,
 						GenreId = genreId
 					};
-					context.BookGenres.Add(bookGenre);
-					context.SaveChanges();
+					book.BookGenres.Add(bookGenre);
 				}
+				context.Books.Add(book);
+				context.SaveChanges();
 
 				return RedirectToAction("Index");
-
 			}
 
 			return View(model);
@@ -135,7 +138,7 @@ namespace LibraryApp.Controllers
 			{
 				var book = context.Books.SingleOrDefault(x => x.BookId == bookId);
 
-				ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
+				//ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
 				//	ViewBag.GenreSelectList = context.Genres
 				//.Select(g => new SelectListItem
 				//{
@@ -164,7 +167,7 @@ namespace LibraryApp.Controllers
 		public IActionResult EditBook(EditBookModel model)
 		{
 			LibraryContext context = new LibraryContext();
-			ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
+			//ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
 
 
 			if (ModelState.IsValid)
@@ -198,8 +201,11 @@ namespace LibraryApp.Controllers
 
 			var book = context.Books
 			   .Include(x => x.BookAuthors)
+			   .Include(x => x.BookGenres)
 				.SingleOrDefault(x => x.BookId == bookId);
 			//context.BookAuthors.RemoveRange(book.BookAuthors);
+			context.BookGenres.RemoveRange(book.BookGenres);
+			context.Books.Remove(book);
 			context.Books.Remove(book);
 			_ = context.SaveChanges();
 
