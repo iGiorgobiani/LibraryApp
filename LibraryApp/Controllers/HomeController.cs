@@ -71,32 +71,34 @@ namespace LibraryApp.Controllers
 					Value = g.GenreId.ToString(),
 					Text = g.Name
 				}).ToList(),
-				SelectedGenreIds = new List<int>() // Initializing SelectedGenreIds to an empty list
+				SelectedGenreIds = new List<int>(), // Initializing SelectedGenreIds to an empty list
+
+				AuthorSelectList = context.Authors.Select(a => new System.Web.Mvc.SelectListItem
+				{
+					Value = a.AuthorId.ToString(),
+					Text = a.Firstname
+				})
 			};
 
 			ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
 			ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
+			ViewBag.AuthorSelectList = new SelectList(context.Authors, "AuthorId", "Firstname");
+            ViewBag.SelectedAuthorList = model.SelectedAuthorIds; // Assign SelectedGenreIds to ViewBag
 
-			return View();
+            return View();
 		}
 
-		[HttpGet]
-		public IActionResult GetGenres()
-		{
-			LibraryContext context = new LibraryContext();
-			var genres = context.Genres.Select(g => g.Name).ToList();
-			return Ok(genres);
-		}
 
 		[HttpPost]
 		public IActionResult AddBook(AddBookModel model)
 		{
 			LibraryContext context = new LibraryContext();
 			ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
-			ViewBag.SelectedGenreIds = model.SelectedGenreIds; 
+			ViewBag.SelectedGenreIds = model.SelectedGenreIds;
+            ViewBag.AuthorSelectList = new SelectList(context.Authors, "AuthorId", "Firstname");
+            ViewBag.SelectedAuthorList = model.SelectedAuthorIds; // Assign SelectedGenreIds to ViewBag
 
-
-			if (ModelState.IsValid)
+            if (ModelState.IsValid)
 			{
 				var queryResult = context.Books
 				.Include(x => x.BookGenres)
@@ -120,6 +122,16 @@ namespace LibraryApp.Controllers
 						GenreId = genreId
 					};
 					book.BookGenres.Add(bookGenre);
+				}
+
+				foreach (var authorId in model.SelectedAuthorIds)
+				{
+					var bookAuthor = new BookAuthor
+					{
+						BookId = book.BookId,
+						AuthorId = authorId
+					};
+					book.BookAuthors.Add(bookAuthor);
 				}
 				context.Books.Add(book);
 				context.SaveChanges();
