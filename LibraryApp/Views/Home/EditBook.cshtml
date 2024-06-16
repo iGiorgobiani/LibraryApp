@@ -1,5 +1,10 @@
 ﻿@model LibraryApp.Models.Book.EditBookModel
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" integrity="sha512-yVvxUQV0QESBt1SyZbNJMAwyKvFTLMyXSyBHDO4BG5t7k/Lw34tyqlSDlKIrIENIzCl+RVUNjmCPG+V/GMesRw==" crossorigin="anonymous" />
 
 
 
@@ -30,6 +35,29 @@
 				@Html.ValidationMessageFor(x => x.Pages, null, new { @class = "text-danger" })
 			</div>
 
+			<div class="form-group">
+				@Html.LabelFor(m => m.Genres, "Genres", new { @class = "control-label" })
+
+				@Html.ListBoxFor(
+								m => m.Genres,
+								new MultiSelectList(Model.Genres, "GenreId", "Name", Model.Genres.Select(g => g.GenreId)),
+								new { @class = "form-control chosen-select", @data_placeholder = "Choose genres..." }
+								)
+
+				@Html.ValidationMessageFor(m => m.Genres, "", new { @class = "text-danger" })
+			</div>
+
+			<div>
+				<div class="col-md-5" finput>
+					<br />
+					<label for="SelectedGenreIds">Genre</label>
+					@Html.ListBoxFor(x => x.SelectedGenreIds, (IEnumerable<SelectListItem>)ViewBag.GenreSelectList, new { @class = "chosen-select form-control", @data_placeholder = "Choose genre" })
+					@Html.ValidationMessageFor(x => x.SelectedGenreIds, null, new { @class = "text-danger" })
+				</div>
+				<br />
+			</div>
+
+
 @* 			<div class="col-md-5" finput>
 				@Html.LabelFor(x => x.GenreId)
 				@Html.TextBoxFor(x => x.GenreId, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter genre" })
@@ -50,3 +78,17 @@
 		}
 	</div>
 </div>
+
+
+
+<script>
+	let choosen = $(".chosen-select").chosen({ width: "500px" });
+
+	$('#myForm').on('submit', function (e) {
+		e.preventDefault();
+		const form = e.target;
+		const milestones = $(form.elements.milestone).val();
+		if (milestones.length > 1) alert('error');
+		else alert('success')
+	})
+</script>

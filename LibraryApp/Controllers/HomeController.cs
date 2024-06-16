@@ -6,6 +6,7 @@ using LibraryApp.Models.Author;
 using X.PagedList;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using LibraryApp.Database;
+using System.Net;
 
 namespace LibraryApp.Controllers
 {
@@ -146,18 +147,15 @@ namespace LibraryApp.Controllers
 		public IActionResult EditBook(int bookId)
 		{
 			LibraryContext context = new LibraryContext();
-			if (context.Books.Any(x => x.BookId == bookId))
-			{
-				var book = context.Books.SingleOrDefault(x => x.BookId == bookId);
 
-				//ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
-				//	ViewBag.GenreSelectList = context.Genres
-				//.Select(g => new SelectListItem
-				//{
-				//	Value = g.GenreId.ToString(),
-				//	Text = g.Name
-				//})
-				//.ToList();
+            if (context.Books.Any(x => x.BookId == bookId))
+			{
+				var book = context.Books
+					.Include(x => x.BookGenres) //სანამ მივხვდებოდი რომ ეს უნდა მექნა 1 სთ დავხარჯე
+					.ThenInclude(x => x.Genre)
+					.Include(x => x.BookAuthors)
+					.ThenInclude(x => x.Author)
+					.SingleOrDefault(x => x.BookId == bookId);
 
 				var model = new EditBookModel()
 				{
@@ -165,9 +163,19 @@ namespace LibraryApp.Controllers
 					Name = book.Name,
 					Year = book.Year,
 					Pages = book.Pages,
-				//	GenreId = book.GenreId
+					Genres = book.BookGenres.Select(g => new BookGenreModel()
+					{
+						Name = g.Genre.Name,
+						BookId = bookId,
+						GenreId = g.Genre.GenreId
+					}).ToList(),
+					SelectedGenreIds = new List<int>()
 				};
-				return View(model);
+
+                ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
+                ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
+
+                return View(model);
 
 			}
 			return RedirectToAction("Index");
@@ -175,11 +183,10 @@ namespace LibraryApp.Controllers
 		}
 
 
-		[HttpPost]
+        [HttpPost]
 		public IActionResult EditBook(EditBookModel model)
 		{
 			LibraryContext context = new LibraryContext();
-			//ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
 
 
 			if (ModelState.IsValid)
@@ -191,10 +198,29 @@ namespace LibraryApp.Controllers
 				book.Name = model.Name;
 				book.Year = model.Year;
 				book.Pages = model.Pages;
-				//book.GenreId = model.GenreId;
+				
+				foreach (var genreId in model.SelectedGenreIds)
+				{
+					var bookGenre = new BookGenre
+					{
+						BookId = book.BookId,
+						GenreId = genreId
+					};
+					book.BookGenres.Add(bookGenre);
+				}
+				
 
+                //foreach (var genreId in model.SelectedGenreIds)
+                //{
+                //    var bookGenre = new BookGenre
+                //    {
+                //        BookId = book.BookId,
+                //        GenreId = genreId
+                //    };
+                //    book.BookGenres.Add(bookGenre);
+                //}
 
-				context.SaveChanges();
+                context.SaveChanges();
 
 				return RedirectToAction("Index");
 			}
