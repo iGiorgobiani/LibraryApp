@@ -169,11 +169,13 @@ namespace LibraryApp.Controllers
 						BookId = bookId,
 						GenreId = g.Genre.GenreId
 					}).ToList(),
-					SelectedGenreIds = new List<int>()
+					SelectedGenreIds = new List<int>(),
+					SelectedRemoveIds = new List<int>()
 				};
 
                 ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
                 ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
+				ViewBag.SelectedRemoveIds = model.SelectedRemoveIds;
 
                 return View(model);
 
@@ -208,18 +210,14 @@ namespace LibraryApp.Controllers
 					};
 					book.BookGenres.Add(bookGenre);
 				}
-				
 
-                //foreach (var genreId in model.SelectedGenreIds)
-                //{
-                //    var bookGenre = new BookGenre
-                //    {
-                //        BookId = book.BookId,
-                //        GenreId = genreId
-                //    };
-                //    book.BookGenres.Add(bookGenre);
-                //}
-
+				foreach (var genreId in model.SelectedRemoveIds)
+				{
+					var bookGenre = context.BookGenres
+						.SingleOrDefault(g => g.BookId == model.BookId && g.GenreId == genreId);
+					context.BookGenres .Remove(bookGenre);
+				}
+			
                 context.SaveChanges();
 
 				return RedirectToAction("Index");

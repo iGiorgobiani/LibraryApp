@@ -13,9 +13,10 @@ namespace LibraryApp.Models.Book
 		public List<BookGenreModel>? Genres { get; set; } //To show what genres book have (according to addbookmodel)
         public List<int>? SelectedGenreIds { get; set; } 
         public IEnumerable<SelectListItem>? GenreSelectList { get; set; }
+		public List<int>? SelectedRemoveIds { get; set; }
 
 
-    }
+	}
 }
 
 public class BookGenreModel
