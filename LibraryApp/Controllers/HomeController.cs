@@ -148,7 +148,7 @@ namespace LibraryApp.Controllers
 		{
 			LibraryContext context = new LibraryContext();
 
-            if (context.Books.Any(x => x.BookId == bookId))
+			if (context.Books.Any(x => x.BookId == bookId))
 			{
 				var book = context.Books
 					.Include(x => x.BookGenres) //სანამ მივხვდებოდი რომ ეს უნდა მექნა 1 სთ დავხარჯე
@@ -169,9 +169,29 @@ namespace LibraryApp.Controllers
 						BookId = bookId,
 						GenreId = g.Genre.GenreId
 					}).ToList(),
-					SelectedGenreIds = new List<int>(),
+					SelectedGenreIds = new List<int>(), // ეს 2 უნდა გავაერთიანო, რომ უკვე მონიშნულად მოქონდეს ისინი, რაც არჩეულია და პირდაპირ იქიდან იშლებოდეს ამდენი მაიმუნობის გარეშე
 					SelectedRemoveIds = new List<int>()
 				};
+
+				var alreadyGenres = context.BookGenres
+					.Include(x => x.Genre)
+					.Where(x => x.BookId == bookId)
+					.ToList(); // Get a list of BookGenre objects
+
+				//var alreadyGenres = context.BookGenres
+				//	.Include(X => X.Genre)
+				//	.Include(x => x.Book)
+				//	.ThenInclude(x => x.BookGenres)
+				//	.SingleOrDefault(x => x.BookId == bookId);
+
+				if (alreadyGenres != null)
+				{
+					foreach (var genre in alreadyGenres)
+					{
+						model.SelectedGenreIds.Add((int)genre.GenreId);
+						model.SelectedRemoveIds.Add((int)genre.GenreId);
+					};
+				}
 
                 ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
                 ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
@@ -193,25 +213,37 @@ namespace LibraryApp.Controllers
 
 			if (ModelState.IsValid)
 			{
-
-
 				var book = context.Books.SingleOrDefault(x => x.BookId == model.BookId);
 
 				book.Name = model.Name;
 				book.Year = model.Year;
 				book.Pages = model.Pages;
 				
-				foreach (var genreId in model.SelectedGenreIds)
-				{
-					var bookGenre = new BookGenre
-					{
-						BookId = book.BookId,
-						GenreId = genreId
-					};
-					book.BookGenres.Add(bookGenre);
-				}
+				if (model.SelectedGenreIds != null) //რომ ერორზე არ გადიოდეს თუ არ მონიშნავ
+						
+						if (model.SelectedGenreIds != model.SelectedRemoveIds)
+							foreach (var genreId in model.SelectedRemoveIds)
+							{
+								var bookGenre = context.BookGenres
+									.SingleOrDefault(g => g.BookId == model.BookId && g.GenreId == genreId);
+								context.BookGenres.Remove(bookGenre);
+							}
+					
+							foreach (var genreId in model.SelectedGenreIds)
+							{
+								var bookGenre = new BookGenre
+								{
+									BookId = book.BookId,
+									GenreId = genreId
+								};
+								book.BookGenres.Add(bookGenre);
+							}
 
-				foreach (var genreId in model.SelectedRemoveIds)
+
+
+
+				if (model.SelectedRemoveIds != null) //რომ ერორზე არ გადიოდეს თუ არ მონიშნავ
+					foreach (var genreId in model.SelectedRemoveIds)
 				{
 					var bookGenre = context.BookGenres
 						.SingleOrDefault(g => g.BookId == model.BookId && g.GenreId == genreId);
