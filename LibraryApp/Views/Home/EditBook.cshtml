@@ -35,29 +35,7 @@
 				@Html.TextBoxFor(x => x.Pages, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter amount of pages" })
 				@Html.ValidationMessageFor(x => x.Pages, null, new { @class = "text-danger" })
 			</div>
-
-@* 			<div class="form-group">
-				@Html.LabelFor(m => m.Genres, "Genres", new { @class = "control-label" })
-
-				@Html.ListBoxFor(
-								m => m.Genres,
-								new MultiSelectList(Model.Genres, "GenreId", "Name", Model.Genres.Select(g => g.GenreId)),
-								new { @class = "form-control chosen-select", @data_placeholder = "Choose genres..." }
-								)
-
-				@Html.ValidationMessageFor(m => m.Genres, "", new { @class = "text-danger" })
-			</div> *@
-@* 
-			<div>
-				<div class="col-md-5" finput>
-					<br />
-					<label for="SelectedRemoveIds">Existing Genres</label>
-					@Html.ListBoxFor(x => x.SelectedRemoveIds, new MultiSelectList(Model.Genres, "GenreId", "Name", Model.Genres.Select(g => g.GenreId)), new { @class = "chosen-select form-control", @data_placeholder = "Select to delete" })
-					@Html.ValidationMessageFor(x => x.SelectedRemoveIds, null, new { @class = "text-danger" })
-				</div>
-				<br />
-			</div> *@
-
+//GENRES
 			<div>
 				<div class="col-md-5" finput>
 					<br />
@@ -74,22 +52,27 @@
 				<input type="hidden" name="SelectedRemoveIds" value="@genre.GenreId" />
 			}
 
-@* 			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.GenreId)
-				@Html.TextBoxFor(x => x.GenreId, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter genre" })
-				@Html.ValidationMessageFor(x => x.GenreId, null, new { @class = "text-danger" })
-			</div> *@
+//AUTHORS
+			<div>
+				<div class="col-md-5" finput>
+					<br />
+					<label for="SelectedAuthorIds">Author</label>
+					@Html.ListBoxFor(x => x.SelectedAuthorIds, (IEnumerable<SelectListItem>)ViewBag.AuthorSelectList, new { @class = "chosen-select form-control", @data_placeholder = "Select to add" })
+					@Html.ValidationMessageFor(x => x.SelectedAuthorIds, null, new { @class = "text-danger" })
+				</div>
+				<br />
+			</div>
 
-@* 			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.GenreId, "Genre")
-				@Html.DropDownListFor(x => x.GenreId, (IEnumerable<SelectListItem>)ViewBag.GenreSelectList, "Select Genre", new { @class = "form-control" })
-				@Html.ValidationMessageFor(x => x.GenreId, null, new { @class = "text-danger" })
-			</div> *@
+			<!-- Hidden inputs for SelectedRemoveAuthorIds -->
+			@foreach (var author in Model.Authors)
+			{
+				<input type="hidden" name="SelectedRemoveAuthorIds" value="@author.AuthorId" />
+			}
 
+//SUBMIT BUTTON
 			<div class="col-md-5">
 				<input type="submit" class="btn btn-primary" value="Update" />
 			</div>
-
 
 		}
 	</div>

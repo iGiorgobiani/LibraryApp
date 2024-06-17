@@ -170,19 +170,21 @@ namespace LibraryApp.Controllers
 						GenreId = g.Genre.GenreId
 					}).ToList(),
 					SelectedGenreIds = new List<int>(), // ეს 2 უნდა გავაერთიანო, რომ უკვე მონიშნულად მოქონდეს ისინი, რაც არჩეულია და პირდაპირ იქიდან იშლებოდეს ამდენი მაიმუნობის გარეშე
-					SelectedRemoveIds = new List<int>()
+					SelectedRemoveIds = new List<int>(),
+					Authors = book.BookAuthors.Select(a => new BookAuthorEditModel()
+					{
+						Lastname = a.Author.Lastname,
+						AuthorId = a.Author.AuthorId,
+						BookId = bookId
+					}).ToList(),
+					SelectedAuthorIds = new List<int>(),
+					SelectedRemoveAuthorIds = new List<int>()
 				};
 
 				var alreadyGenres = context.BookGenres
 					.Include(x => x.Genre)
 					.Where(x => x.BookId == bookId)
 					.ToList(); // Get a list of BookGenre objects
-
-				//var alreadyGenres = context.BookGenres
-				//	.Include(X => X.Genre)
-				//	.Include(x => x.Book)
-				//	.ThenInclude(x => x.BookGenres)
-				//	.SingleOrDefault(x => x.BookId == bookId);
 
 				if (alreadyGenres != null)
 				{
@@ -197,7 +199,26 @@ namespace LibraryApp.Controllers
                 ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
 				ViewBag.SelectedRemoveIds = model.SelectedRemoveIds;
 
-                return View(model);
+				var alreadyAuthors = context.BookAuthors
+					.Include(x => x.Author)
+					.Where(x => x.BookId == bookId)
+					.ToList(); // Get a list of BookAuthor objects
+
+				if (alreadyAuthors != null)
+				{
+					foreach (var author in alreadyAuthors)
+					{
+						model.SelectedAuthorIds.Add((int)author.AuthorId);
+						model.SelectedRemoveAuthorIds.Add((int)author.AuthorId);
+					};
+				}
+
+				//Author Viewbags
+				ViewBag.AuthorSelectList = new SelectList(context.Authors, "AuthorId", "Lastname");
+				ViewBag.SelectedAuthorIds = model.SelectedAuthorIds; // Assign SelectedAuthorIds to ViewBag
+				ViewBag.SelectedRemoveAuthorIds = model.SelectedRemoveAuthorIds;
+
+				return View(model);
 
 			}
 			return RedirectToAction("Index");
@@ -218,39 +239,70 @@ namespace LibraryApp.Controllers
 				book.Name = model.Name;
 				book.Year = model.Year;
 				book.Pages = model.Pages;
-				
+
 				if (model.SelectedGenreIds != null) //რომ ერორზე არ გადიოდეს თუ არ მონიშნავ
-						
-						if (model.SelectedGenreIds != model.SelectedRemoveIds)
-							foreach (var genreId in model.SelectedRemoveIds)
-							{
-								var bookGenre = context.BookGenres
-									.SingleOrDefault(g => g.BookId == model.BookId && g.GenreId == genreId);
-								context.BookGenres.Remove(bookGenre);
-							}
-					
-							foreach (var genreId in model.SelectedGenreIds)
-							{
-								var bookGenre = new BookGenre
-								{
-									BookId = book.BookId,
-									GenreId = genreId
-								};
-								book.BookGenres.Add(bookGenre);
-							}
-
-
-
-
-				if (model.SelectedRemoveIds != null) //რომ ერორზე არ გადიოდეს თუ არ მონიშნავ
-					foreach (var genreId in model.SelectedRemoveIds)
 				{
-					var bookGenre = context.BookGenres
-						.SingleOrDefault(g => g.BookId == model.BookId && g.GenreId == genreId);
-					context.BookGenres .Remove(bookGenre);
+					if (model.SelectedGenreIds != model.SelectedRemoveIds && model.SelectedRemoveIds != null)
+					{
+						foreach (var genreId in model.SelectedRemoveIds)
+						{
+							var bookGenre = context.BookGenres
+								.SingleOrDefault(g => g.BookId == model.BookId && g.GenreId == genreId);
+							context.BookGenres.Remove(bookGenre);
+						}
+					}
+					foreach (var genreId in model.SelectedGenreIds)
+					{
+						var bookGenre = new BookGenre
+						{
+							BookId = book.BookId,
+							GenreId = genreId
+						};
+						book.BookGenres.Add(bookGenre);
+					}
 				}
-			
-                context.SaveChanges();
+				if (model.SelectedRemoveIds != null) //რომ ერორზე არ გადიოდეს თუ არ მონიშნა
+				{
+					foreach (var genreId in model.SelectedRemoveIds)
+					{
+						var bookGenre = context.BookGenres
+							.SingleOrDefault(g => g.BookId == model.BookId && g.GenreId == genreId);
+						context.BookGenres.Remove(bookGenre);
+					}
+				}
+
+				if (model.SelectedAuthorIds != null) //რომ ერორზე არ გადიოდეს თუ არ მონიშნავ
+				{
+					if (model.SelectedAuthorIds != model.SelectedRemoveAuthorIds && model.SelectedRemoveAuthorIds != null)
+						foreach (var authorId in model.SelectedRemoveAuthorIds) //შლის ყველა ძველ ჩანაწერს
+						{
+							var bookAuthor = context.BookAuthors
+								.SingleOrDefault(g => g.BookId == model.BookId && g.AuthorId == authorId);
+							context.BookAuthors.Remove(bookAuthor);
+						}
+
+					foreach (var authorId in model.SelectedAuthorIds) //ქმნის ახალ ჩანაწერებს
+					{
+						var bookAuthor = new BookAuthor
+						{
+							BookId = book.BookId,
+							AuthorId = authorId
+						};
+						book.BookAuthors.Add(bookAuthor);
+					}
+				}
+				
+				if (model.SelectedRemoveAuthorIds != null) //რომ ერორზე არ გადიოდეს თუ არ მონიშნა
+				{
+					foreach (var authorId in model.SelectedRemoveAuthorIds)
+					{
+						var bookAuthor = context.BookAuthors
+							.SingleOrDefault(g => g.BookId == model.BookId && g.AuthorId == authorId);
+						context.BookAuthors.Remove(bookAuthor);
+					}
+				}
+
+				context.SaveChanges();
 
 				return RedirectToAction("Index");
 			}
