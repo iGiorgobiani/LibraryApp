@@ -137,6 +137,7 @@
 <script>
 
     let removeBookId = 0;
+    let currentUrl = window.location.href;
 
     let tryRemoveBook = (element) => {
         removeBookId = element.dataset.bookid;
@@ -151,7 +152,7 @@
             return;
         }
 
-        let newUrl = '@Url.Action("RemoveBook", "Home")' + '?BookId=' + removeBookId;
+        let newUrl = '@Url.Action("RemoveBook", "Home")' + '?bookId=' + removeBookId + '&returnUrl=' + encodeURIComponent(currentUrl);
         window.location.href = newUrl;
     }
 

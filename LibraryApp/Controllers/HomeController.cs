@@ -310,14 +310,9 @@ namespace LibraryApp.Controllers
 		}
 
 
-		public IActionResult RemoveBook(int bookId)
-		{
-
-			var pageOne = HttpContext.Request.Protocol; //ამას გამოაქვს HTTP/ + გვერდი
-			var pageOneUpdated = pageOne.Substring(5); //ვშლი HTTP/-ს
-
+		public IActionResult RemoveBook(int bookId, string returnUrl)
+		{	
 			LibraryContext context = new LibraryContext();
-
 
 			var book = context.Books
 			   .Include(x => x.BookAuthors)
@@ -330,10 +325,10 @@ namespace LibraryApp.Controllers
 			_ = context.SaveChanges();
 
 
-			//var page = (context.Books.Count() +9) / 10;
+            //var page = (context.Books.Count() +9) / 10;
 
-			return RedirectToAction("Index", "Home", new { page = pageOneUpdated });
-		}
+            return Redirect(returnUrl);
+        }
 
 		public IActionResult Authors(AuthorsViewModel model, int? page)
 		{
