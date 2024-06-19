@@ -36,7 +36,7 @@
 				<div class="col-md-5" finput>
 					<br />
 					<label for="SelectedGenreIds">Genre</label>
-					@Html.ListBoxFor(x => x.SelectedGenreIds, (IEnumerable<SelectListItem>)ViewBag.GenreSelectList, new { @class = "chosen-select form-control", @data_placeholder = "Choose genre" })
+					@Html.ListBoxFor(x => x.SelectedGenreIds, new SelectList(ViewBag.GenreSelectList, "Value", "Text"), new { @class = "chosen-select form-control", @data_placeholder = "Choose genre" })
 					@Html.ValidationMessageFor(x => x.SelectedGenreIds, null, new { @class = "text-danger" })
 				</div>
 				<br />
@@ -46,7 +46,7 @@
 				<div class="col-md-5" finput>
 					<br />
 					<label for="SelectedAuthorIds">Author</label>
-					@Html.ListBoxFor(x => x.SelectedAuthorIds, (IEnumerable<SelectListItem>)ViewBag.AuthorSelectList, new { @class = "chosen-select form-control", @data_placeholder = "Choose genre" })
+					@Html.ListBoxFor(x => x.SelectedAuthorIds, new SelectList(ViewBag.AuthorSelectList, "Value", "Text"), new { @class = "chosen-select form-control", @data_placeholder = "Choose genre" })
 					@Html.ValidationMessageFor(x => x.SelectedAuthorIds, null, new { @class = "text-danger" })
 				</div>
 				<br />

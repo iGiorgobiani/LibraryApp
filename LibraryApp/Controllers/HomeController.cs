@@ -61,30 +61,30 @@ namespace LibraryApp.Controllers
 			return View(model);
 		}
 
-		public IActionResult AddBook()
+		private void InitializeAddBook(LibraryContext context)
 		{
-			LibraryContext context = new LibraryContext();
-
-			var model = new AddBookModel
+			var authorSelectList = context.Authors.Select(a => new System.Web.Mvc.SelectListItem
 			{
-				GenreSelectList = context.Genres.Select(g => new System.Web.Mvc.SelectListItem
-				{
-					Value = g.GenreId.ToString(),
-					Text = g.Name
-				}).ToList(),
-				SelectedGenreIds = new List<int>(), // Initializing SelectedGenreIds to an empty list
+				Value = a.AuthorId.ToString(),
+				Text = a.Firstname + " " + a.Lastname
+			});
 
-				AuthorSelectList = context.Authors.Select(a => new System.Web.Mvc.SelectListItem
-				{
-					Value = a.AuthorId.ToString(),
-					Text = a.Firstname
-				})
-			};
+			var genreSelectList = context.Genres.Select(g => new System.Web.Mvc.SelectListItem
+			{
+				Value = g.GenreId.ToString(),
+				Text = g.Name
+			});
 
-			ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
-			ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
-			ViewBag.AuthorSelectList = new SelectList(context.Authors, "AuthorId", "Firstname");
-            ViewBag.SelectedAuthorList = model.SelectedAuthorIds; // Assign SelectedGenreIds to ViewBag
+			ViewBag.GenreSelectList = genreSelectList;
+            ViewBag.AuthorSelectList = authorSelectList;
+
+        }
+
+        public IActionResult AddBook()
+		{
+			LibraryContext context = new LibraryContext();	
+
+			InitializeAddBook(context);
 
             return View();
 		}
@@ -94,10 +94,8 @@ namespace LibraryApp.Controllers
 		public IActionResult AddBook(AddBookModel model)
 		{
 			LibraryContext context = new LibraryContext();
-			ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
-			ViewBag.SelectedGenreIds = model.SelectedGenreIds;
-            ViewBag.AuthorSelectList = new SelectList(context.Authors, "AuthorId", "Firstname");
-            ViewBag.SelectedAuthorList = model.SelectedAuthorIds; // Assign SelectedGenreIds to ViewBag
+
+			InitializeAddBook(context);
 
             if (ModelState.IsValid)
 			{
@@ -137,10 +135,14 @@ namespace LibraryApp.Controllers
 				context.Books.Add(book);
 				context.SaveChanges();
 
-				return RedirectToAction("Index");
+				TempData["Success"] = "Book has been added successfully";
+
+				return RedirectToAction("EditBook", new { bookId = book.BookId});
 			}
 
-			return View(model);
+            TempData["Error"] = "Book couldn't be added";
+
+            return View(model);
 		}
 
 		//
