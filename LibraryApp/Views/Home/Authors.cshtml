@@ -51,6 +51,7 @@
                     <th>Lastname</th>
                     <th>Birthdate</th>
                     <th>Booknumber</th>
+                    <th>Cv</th>
                     <th></th>
                 </tr>
             </thead>
@@ -63,6 +64,7 @@
                         <td>@author.Lastname</td>
                         <td>@String.Format("{0: dd/MM/yyyy}", author.Birthdate)</td>
                         <td>@author.Booknumber</td>
+                        <td>@author.Cv</td>
                         <td>
                             <a class="btn btn-primary" href="@Url.Action("EditAuthor", "Home", new { authorId = author.AuthorId} )">Edit</a>
                             <!-- Button trigger modal -->

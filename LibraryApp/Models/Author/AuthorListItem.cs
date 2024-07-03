@@ -13,6 +13,8 @@ namespace LibraryApp.Models.Author
 
         public DateTime? Birthdate { get; set; }
 
-        public int Booknumber {  get; set; }
+		public IFormFile? Cv { get; set; }
+
+		public int Booknumber {  get; set; }
     }
 }

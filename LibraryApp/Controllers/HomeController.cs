@@ -76,17 +76,17 @@ namespace LibraryApp.Controllers
 			});
 
 			ViewBag.GenreSelectList = genreSelectList;
-            ViewBag.AuthorSelectList = authorSelectList;
+			ViewBag.AuthorSelectList = authorSelectList;
 
-        }
+		}
 
-        public IActionResult AddBook()
+		public IActionResult AddBook()
 		{
-			LibraryContext context = new LibraryContext();	
+			LibraryContext context = new LibraryContext();
 
 			InitializeAddBook(context);
 
-            return View();
+			return View();
 		}
 
 
@@ -97,7 +97,7 @@ namespace LibraryApp.Controllers
 
 			InitializeAddBook(context);
 
-            if (ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				var queryResult = context.Books
 				.Include(x => x.BookGenres)
@@ -137,12 +137,12 @@ namespace LibraryApp.Controllers
 
 				TempData["Success"] = "Book has been added successfully";
 
-				return RedirectToAction("EditBook", new { bookId = book.BookId});
+				return RedirectToAction("EditBook", new { bookId = book.BookId });
 			}
 
-            TempData["Error"] = "Book couldn't be added";
+			TempData["Error"] = "Book couldn't be added";
 
-            return View(model);
+			return View(model);
 		}
 
 		//
@@ -197,8 +197,8 @@ namespace LibraryApp.Controllers
 					};
 				}
 
-                ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
-                ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
+				ViewBag.GenreSelectList = new SelectList(context.Genres, "GenreId", "Name");
+				ViewBag.SelectedGenreIds = model.SelectedGenreIds; // Assign SelectedGenreIds to ViewBag
 				ViewBag.SelectedRemoveIds = model.SelectedRemoveIds;
 
 				var alreadyAuthors = context.BookAuthors
@@ -220,15 +220,19 @@ namespace LibraryApp.Controllers
 				ViewBag.SelectedAuthorIds = model.SelectedAuthorIds; // Assign SelectedAuthorIds to ViewBag
 				ViewBag.SelectedRemoveAuthorIds = model.SelectedRemoveAuthorIds;
 
+
+
 				return View(model);
 
+
 			}
+
 			return RedirectToAction("Index");
 
 		}
 
 
-        [HttpPost]
+		[HttpPost]
 		public IActionResult EditBook(EditBookModel model)
 		{
 			LibraryContext context = new LibraryContext();
@@ -293,7 +297,7 @@ namespace LibraryApp.Controllers
 						book.BookAuthors.Add(bookAuthor);
 					}
 				}
-				
+
 				if (model.SelectedRemoveAuthorIds != null) //რომ ერორზე არ გადიოდეს თუ არ მონიშნა
 				{
 					foreach (var authorId in model.SelectedRemoveAuthorIds)
@@ -305,7 +309,7 @@ namespace LibraryApp.Controllers
 				}
 
 				context.SaveChanges();
-
+				TempData["Success"] = "Book has been edited successfully";
 				return RedirectToAction("Index");
 			}
 			return View(model);
@@ -313,7 +317,7 @@ namespace LibraryApp.Controllers
 
 
 		public IActionResult RemoveBook(int bookId, string returnUrl)
-		{	
+		{
 			LibraryContext context = new LibraryContext();
 
 			var book = context.Books
@@ -327,10 +331,10 @@ namespace LibraryApp.Controllers
 			_ = context.SaveChanges();
 
 
-            //var page = (context.Books.Count() +9) / 10;
+			//var page = (context.Books.Count() +9) / 10;
 
-            return Redirect(returnUrl);
-        }
+			return Redirect(returnUrl);
+		}
 
 		public IActionResult Authors(AuthorsViewModel model, int? page)
 		{
@@ -362,7 +366,7 @@ namespace LibraryApp.Controllers
 				Lastname = x.Lastname,
 				Birthdate = x.Birthdate,
 				Booknumber = x.BookAuthors.Count
-			}).ToPagedList(pageNumber, numberOfItemsPerPage);
+			}).OrderByDescending(x => x.AuthorId).ToPagedList(pageNumber, numberOfItemsPerPage);
 
 
 			return View(model);
@@ -381,12 +385,34 @@ namespace LibraryApp.Controllers
 			{
 				LibraryContext context = new LibraryContext();
 
-				context.Authors.Add(new Author()
+				var author = new Author
+
 				{
 					Firstname = model.Firstname,
 					Lastname = model.Lastname,
 					Birthdate = model.Birthdate,
-				});
+				};
+				//            context.Authors.Add(new Author()
+				//{
+				//	Firstname = model.Firstname,
+				//	Lastname = model.Lastname,
+				//	Birthdate = model.Birthdate,
+				//});
+
+				if (model.Cv != null && model.Cv.Length > 0)
+				{
+					using (var ms = new MemoryStream())
+					{
+						model.Cv.CopyTo(ms);
+						var file = ms.ToArray();
+						author.Cv = file;
+						author.CvToken = Guid.NewGuid().ToString();
+					}
+
+				}
+
+				context.Authors.Add(author);
+
 				context.SaveChanges();
 
 				return RedirectToAction("Authors");
@@ -407,6 +433,8 @@ namespace LibraryApp.Controllers
 					Firstname = author.Firstname,
 					Lastname = author.Lastname,
 					//Birthdate = string.Format("{0: mm.DD.yyyy}" , author.Birthdate)
+					HasCv = author.Cv != null,
+					CvToken = author.CvToken
 
 
 				};
@@ -427,6 +455,18 @@ namespace LibraryApp.Controllers
 				author.Firstname = model.Firstname;
 				author.Lastname = model.Lastname;
 				//author.Birthdate = model.Birthdate;
+				
+				if (model.Cv != null && model.Cv.Length > 0)
+				{
+					using (var ms = new MemoryStream())
+					{
+						model.Cv.CopyTo(ms);
+						var file = ms.ToArray();
+						author.Cv = file;
+						author.CvToken = Guid.NewGuid().ToString();
+					}
+
+				}
 
 				context.SaveChanges();
 
@@ -450,7 +490,53 @@ namespace LibraryApp.Controllers
 			return RedirectToAction("Authors");
 		}
 
+		public IActionResult ViewFile(int authorId, string cvToken)
+		{
 
+			LibraryContext context = new LibraryContext();
+
+			var authorExists = context.Authors.Any(x => x.AuthorId == authorId);
+
+			if (string.IsNullOrEmpty(cvToken) || !authorExists)
+			{
+				return NotFound();
+			}
+
+			var author = context.Authors.SingleOrDefault(x => x.AuthorId == authorId);
+
+            if ( author.Cv == null)
+			{
+				return NotFound();
+			}
+
+
+			return File(author.Cv, "application/pdf");
+
+        }
+
+		public IActionResult DownloadFile(int authorId, string cvToken)
+		{
+
+			LibraryContext context = new LibraryContext();
+
+			var authorExists = context.Authors.Any(x => x.AuthorId == authorId);
+
+			if (string.IsNullOrEmpty(cvToken) || !authorExists)
+			{
+				return NotFound();
+			}
+
+			var author = context.Authors.SingleOrDefault(x => x.AuthorId == authorId);
+
+			if (author.Cv == null)
+			{
+				return NotFound();
+			}
+
+			var fileName = $"{author.Firstname} {author.Lastname} - CV.pdf";
+			return File(author.Cv, "application/pdf", fileName);
+
+		}
 
 
 

@@ -9,16 +9,16 @@
     </div>
 
     <div>
-		@using (Html.BeginForm("EditAuthor", "Home", FormMethod.Post))
+		@using (Html.BeginForm("EditAuthor", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
 		{
 			@Html.HiddenFor(x => x.AuthorId)
-			<div class="col-md-5" finput>
+			<div class="col-md-5 finput">
 				@Html.LabelFor(x => x.Firstname)
 				@Html.TextBoxFor(x => x.Firstname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter firstname" })
 				@Html.ValidationMessageFor(x => x.Firstname, null, new { @class = "text-danger" })
 			</div>
 
-			<div class="col-md-5" finput>
+			<div class="col-md-5 finput">
 				@Html.LabelFor(x => x.Lastname)
 				@Html.TextBoxFor(x => x.Lastname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter lastname" })
 				@Html.ValidationMessageFor(x => x.Lastname, null, new { @class = "text-danger" })
@@ -30,7 +30,22 @@
 				@Html.ValidationMessageFor(x => x.Birthdate, null, new { @class = "text-danger" })
 			</div> *@
 
-			<div class="col-md-5">
+			<div class="col-md-5 finput">
+				@Html.LabelFor(x => x.Cv)
+				@Html.TextBoxFor(x => x.Cv, new { @class = "form-control", @type = "file", @accept = "application/pdf" })
+				@Html.ValidationMessageFor(x => x.Cv, null, new { @class = "text-danger" })
+			</div>
+
+			@if (Model.HasCv)
+			{
+				<div class="col-md-5 finput">
+					@Html.ActionLink("View Authors CVs", "ViewFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken}, new {@target = "_blank"})
+				</div
+				<div class="col-md-5 finput">
+					@Html.ActionLink("Download Authors CVs", "DownloadFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken})
+				</div>
+			}
+			<div class="col-md-5 finput">
 				<input type="submit" class="btn btn-primary" value="Update" />
 			</div>
 		}

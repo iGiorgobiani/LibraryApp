@@ -6,7 +6,7 @@
 		<h2>Add author form</h2>
 	</div>
 	<div>
-		@using (Html.BeginForm("AddAuthor", "Home", FormMethod.Post))
+		@using (Html.BeginForm("AddAuthor", "Home", FormMethod.Post, new { enctype = "multipart/form-data"}))
 		{
 			<div class="col-md-5" finput>
 				@Html.LabelFor(x => x.Firstname)
@@ -22,8 +22,14 @@
 
 			<div class="col-md-5" finput>
 				@Html.LabelFor(x => x.Birthdate)
-				@Html.TextBoxFor(x => x.Birthdate, new { @class = "form-control", @type = "date", @placeholder = "mm/DD/yyyy" })
+				@Html.TextBoxFor(x => x.Birthdate, new { @class = "form-control", @type = "date", @placeholder = "DD/mm/yyyy" })
 				@Html.ValidationMessageFor(x => x.Birthdate, null, new { @class = "text-danger"})
+			</div>
+
+			<div class="col-md-5" finput>
+				@Html.LabelFor(x => x.Cv)
+				@Html.TextBoxFor(x => x.Cv, new { @class = "form-control", @type = "file", @accept = "application/pdf" })
+				@Html.ValidationMessageFor(x => x.Cv, null, new { @class = "text-danger" })
 			</div>
 
 			<div class="col-md-5">

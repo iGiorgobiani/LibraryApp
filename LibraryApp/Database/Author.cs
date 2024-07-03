@@ -13,5 +13,10 @@ public partial class Author
 
     public DateTime? Birthdate { get; set; }
 
-    public virtual ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
+    public byte[]? Cv {  get; set; }
+
+    public string? CvToken { get; set; }
+
+	public virtual ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
+
 }

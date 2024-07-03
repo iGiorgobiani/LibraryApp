@@ -16,4 +16,5 @@ public class AddAuthorModel
 	[DataType(DataType.Date, ErrorMessage ="Incorrect format")]
 	public DateTime Birthdate { get; set; }
 
+	public IFormFile? Cv { get; set; }
 }
