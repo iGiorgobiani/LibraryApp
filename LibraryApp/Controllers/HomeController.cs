@@ -12,6 +12,8 @@ namespace LibraryApp.Controllers
 {
 	public class HomeController : Controller
 	{
+		private readonly string _imageDirectory = @"C:\\Users\\giorg_hudvewq\\source\\repos\\LibraryApp\\LibraryApp\\wwwroot\\Images\";
+
 		public IActionResult Index(BookViewModel model, int? page)
 		{
 			LibraryContext context = new LibraryContext();
@@ -56,8 +58,7 @@ namespace LibraryApp.Controllers
 					Firstname = a.Author.Firstname,
 					Lastname = a.Author.Lastname
 				}).ToList()
-			}).ToPagedList(pageNumber, numberOfItemsPerPage);
-
+			}).OrderByDescending(x => x.Name).ToPagedList(pageNumber, numberOfItemsPerPage);
 			return View(model);
 		}
 
@@ -365,7 +366,8 @@ namespace LibraryApp.Controllers
 				Firstname = x.Firstname,
 				Lastname = x.Lastname,
 				Birthdate = x.Birthdate,
-				Booknumber = x.BookAuthors.Count
+				Booknumber = x.BookAuthors.Count,
+				ImageArray = x.ImagePath != null ? System.IO.File.ReadAllBytes(_imageDirectory + x.ImagePath) : System.IO.File.ReadAllBytes(_imageDirectory + "avatar.png")
 			}).OrderByDescending(x => x.AuthorId).ToPagedList(pageNumber, numberOfItemsPerPage);
 
 
@@ -392,12 +394,6 @@ namespace LibraryApp.Controllers
 					Lastname = model.Lastname,
 					Birthdate = model.Birthdate,
 				};
-				//            context.Authors.Add(new Author()
-				//{
-				//	Firstname = model.Firstname,
-				//	Lastname = model.Lastname,
-				//	Birthdate = model.Birthdate,
-				//});
 
 				if (model.Cv != null && model.Cv.Length > 0)
 				{
@@ -411,12 +407,26 @@ namespace LibraryApp.Controllers
 
 				}
 
+				if (model.Image != null && model.Image.Length > 0)
+				{
+					using (var ms = new MemoryStream())
+					{
+						var fileName = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(model.Image.FileName);
+						var filePath = _imageDirectory + fileName;
+                        model.Image.CopyTo(ms);
+                        System.IO.File.WriteAllBytes(filePath, ms.ToArray());
+						author.ImagePath = fileName;
+					}
+				}
+
 				context.Authors.Add(author);
 
 				context.SaveChanges();
-
-				return RedirectToAction("Authors");
+				TempData["Success"] = "Author has been added successfully";
+				//return RedirectToAction("Authors");
+				return RedirectToAction("EditAuthor", new { authorId = author.AuthorId});
 			}
+			TempData["Error"] = "Author couldn't be added";
 			return View(model);
 		}
 		//
@@ -432,10 +442,12 @@ namespace LibraryApp.Controllers
 					AuthorId = author.AuthorId,
 					Firstname = author.Firstname,
 					Lastname = author.Lastname,
+					Birthdate = author.Birthdate,
 					//Birthdate = string.Format("{0: mm.DD.yyyy}" , author.Birthdate)
 					HasCv = author.Cv != null,
-					CvToken = author.CvToken
-
+					CvToken = author.CvToken,
+					HasImage = author.ImagePath != null,
+					ImageArray = author.ImagePath != null ? System.IO.File.ReadAllBytes(_imageDirectory + author.ImagePath) : null
 
 				};
 				return View(model);
@@ -454,7 +466,7 @@ namespace LibraryApp.Controllers
 
 				author.Firstname = model.Firstname;
 				author.Lastname = model.Lastname;
-				//author.Birthdate = model.Birthdate;
+				author.Birthdate = model.Birthdate;
 				
 				if (model.Cv != null && model.Cv.Length > 0)
 				{
@@ -468,10 +480,25 @@ namespace LibraryApp.Controllers
 
 				}
 
-				context.SaveChanges();
+				if (model.Image != null && model.Image.Length > 0)
+				{
+					using (var ms = new MemoryStream())
+					{
+                        
+                        var fileName = author.ImagePath != null ? author.ImagePath : Guid.NewGuid().ToString() + System.IO.Path.GetExtension(model.Image.FileName);
+						var filePath = _imageDirectory + fileName;
+						model.Image.CopyTo(ms);
+						System.IO.File.WriteAllBytes(filePath, ms.ToArray());
+						author.ImagePath = fileName;
+                        //author.ImagePath = fileName;
+                    }
+				}
 
-				return RedirectToAction("Authors");
+				context.SaveChanges();
+				TempData["Success"] = "Author has been edited successfully";
+				return RedirectToAction("EditAuthor", new { authorId = author.AuthorId });
 			}
+			TempData["Error"] = "Author couldn't be added";
 			return View(model);
 		}
 

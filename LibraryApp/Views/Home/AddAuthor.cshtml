@@ -9,6 +9,12 @@
 		@using (Html.BeginForm("AddAuthor", "Home", FormMethod.Post, new { enctype = "multipart/form-data"}))
 		{
 			<div class="col-md-5" finput>
+				@Html.LabelFor(x => x.Image)
+				@Html.TextBoxFor(x => x.Image, new { @class = "form-control", @type = "file", @accept = "image/*" })
+				@Html.ValidationMessageFor(x => x.Image, null, new { @class = "text-danger" })
+			</div>
+
+			<div class="col-md-5" finput>
 				@Html.LabelFor(x => x.Firstname)
 				@Html.TextBoxFor(x => x.Firstname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter firstname" })
 				@Html.ValidationMessageFor(x => x.Firstname, null, new { @class = "text-danger" })

@@ -16,6 +16,7 @@ public partial class Author
     public byte[]? Cv {  get; set; }
 
     public string? CvToken { get; set; }
+    public string? ImagePath { get; set; }
 
 	public virtual ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
 

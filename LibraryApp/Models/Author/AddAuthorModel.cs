@@ -17,4 +17,6 @@ public class AddAuthorModel
 	public DateTime Birthdate { get; set; }
 
 	public IFormFile? Cv { get; set; }
+
+	public IFormFile? Image { get; set; }
 }

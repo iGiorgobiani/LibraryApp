@@ -12,6 +12,20 @@
 		@using (Html.BeginForm("EditAuthor", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
 		{
 			@Html.HiddenFor(x => x.AuthorId)
+
+			@if (Model.HasImage)
+			{
+				<div class="col-md-5 finput">
+					<img style="height:200px; margin:auto" src="data:image/jpg;base64,@Convert.ToBase64String(Model.ImageArray, 0, Model.ImageArray.Length)"/> 
+				</div>
+			}
+
+			<div class="col-md-5" finput>
+				@Html.LabelFor(x => x.Image)
+				@Html.TextBoxFor(x => x.Image, new { @class = "form-control", @type = "file", @accept = "image/*" })
+				@Html.ValidationMessageFor(x => x.Image, null, new { @class = "text-danger" })
+			</div>
+
 			<div class="col-md-5 finput">
 				@Html.LabelFor(x => x.Firstname)
 				@Html.TextBoxFor(x => x.Firstname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter firstname" })
@@ -24,11 +38,12 @@
 				@Html.ValidationMessageFor(x => x.Lastname, null, new { @class = "text-danger" })
 			</div>
 
-@* 			<div class="col-md-5" finput>
+			<div class="col-md-5 finput">
 				@Html.LabelFor(x => x.Birthdate)
-				@Html.TextBoxFor(x => x.Birthdate, new { @class = "form-control", @type = "date", @placeholder = "mm/DD/yyyy" })
+				@Html.TextBoxFor(x => x.Birthdate, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+@* 				@Html.TextBoxFor(x => x.Birthdate, new { @class = "form-control", @type = "date", @placeholder = "mm/DD/yyyy" }) *@
 				@Html.ValidationMessageFor(x => x.Birthdate, null, new { @class = "text-danger" })
-			</div> *@
+			</div>
 
 			<div class="col-md-5 finput">
 				@Html.LabelFor(x => x.Cv)
@@ -40,7 +55,7 @@
 			{
 				<div class="col-md-5 finput">
 					@Html.ActionLink("View Authors CVs", "ViewFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken}, new {@target = "_blank"})
-				</div
+				</div>
 				<div class="col-md-5 finput">
 					@Html.ActionLink("Download Authors CVs", "DownloadFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken})
 				</div>
