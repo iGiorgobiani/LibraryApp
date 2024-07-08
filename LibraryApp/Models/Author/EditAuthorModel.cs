@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LibraryApp.Models.Author.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryApp.Models.Author
 {
@@ -16,7 +17,7 @@ namespace LibraryApp.Models.Author
         public string? Lastname { get; set; }
 
         public DateTime? Birthdate { get; set; }
-
+        [AllowedMimeType("application/pdf", ErrorMessage = "Required type is pdf")]
         public IFormFile? Cv { get; set; }
 
         public bool HasCv { get; set; } = true; //vicodet aqvs tu ara Tu aqvs gamovachent links Tu ara ara
@@ -25,7 +26,8 @@ namespace LibraryApp.Models.Author
 
         public bool HasImage { get; set; } = false;
         public Byte[]? ImageArray { get; set; }
-		public IFormFile? Image { get; set; }
+        [AllowedMimeType("image/jpeg", "image/png", ErrorMessage = "Required types are jpg, jpeg, png")]
+        public IFormFile? Image { get; set; }
 
 		// [Required(ErrorMessage = "Required field")]
 		//[DataType(DataType.Date, ErrorMessage = "Incorrect format")]
