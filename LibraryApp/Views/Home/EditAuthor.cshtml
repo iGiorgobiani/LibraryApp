@@ -5,7 +5,7 @@
 
 <div>
     <div>
-        <h2>Edit author</h2>
+        <h2>ავტორის რედაქტირება</h2>
     </div>
 
     <div>
@@ -21,32 +21,32 @@
 			}
 
 			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Image)
+				@Html.LabelFor(x => x.Image, "სურათი")
 				@Html.TextBoxFor(x => x.Image, new { @class = "form-control", @type = "file", @accept = "image/*" })
 				@Html.ValidationMessageFor(x => x.Image, null, new { @class = "text-danger" })
 			</div>
 
 			<div class="col-md-5 finput">
-				@Html.LabelFor(x => x.Firstname)
-				@Html.TextBoxFor(x => x.Firstname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter firstname" })
+				@Html.LabelFor(x => x.Firstname, "სახელი")
+				@Html.TextBoxFor(x => x.Firstname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "შეიყვანეთ სახელი" })
 				@Html.ValidationMessageFor(x => x.Firstname, null, new { @class = "text-danger" })
 			</div>
 
 			<div class="col-md-5 finput">
-				@Html.LabelFor(x => x.Lastname)
-				@Html.TextBoxFor(x => x.Lastname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter lastname" })
+				@Html.LabelFor(x => x.Lastname, "გვარი")
+				@Html.TextBoxFor(x => x.Lastname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "შეიყვანეთ გვარი" })
 				@Html.ValidationMessageFor(x => x.Lastname, null, new { @class = "text-danger" })
 			</div>
 
 			<div class="col-md-5 finput">
-				@Html.LabelFor(x => x.Birthdate)
+				@Html.LabelFor(x => x.Birthdate, "დაბადების თარიღი")
 				@Html.TextBoxFor(x => x.Birthdate, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
 @* 				@Html.TextBoxFor(x => x.Birthdate, new { @class = "form-control", @type = "date", @placeholder = "mm/DD/yyyy" }) *@
 				@Html.ValidationMessageFor(x => x.Birthdate, null, new { @class = "text-danger" })
 			</div>
 
 			<div class="col-md-5 finput">
-				@Html.LabelFor(x => x.Cv)
+				@Html.LabelFor(x => x.Cv, "რეზიუმე")
 				@Html.TextBoxFor(x => x.Cv, new { @class = "form-control", @type = "file", @accept = "application/pdf" })
 				@Html.ValidationMessageFor(x => x.Cv, null, new { @class = "text-danger" })
 			</div>
@@ -61,7 +61,7 @@
 				</div>
 			}
 			<div class="col-md-5 finput">
-				<input type="submit" class="btn btn-primary" value="Update" />
+				<input type="submit" class="btn btn-primary" value="განახლება" />
 			</div>
 		}
     </div>

@@ -13,7 +13,7 @@
 
 <div>
 	<div>
-		<h2>Add book form</h2>
+		<h2>წიგნის დამატება</h2>
 	</div>
 
 	<div>
@@ -22,13 +22,13 @@
 
 			<div class="col-md-5" finput>
 				@Html.LabelFor(x => x.Name)
-				@Html.TextBoxFor(x => x.Name, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter name of the book" })
+				@Html.TextBoxFor(x => x.Name, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "შეიყვანეთ წიგნის სახელი" })
 				@Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
 			</div>
 
 			<div class="col-md-5" finput>
 				@Html.LabelFor(x => x.Year)
-				@Html.TextBoxFor(x => x.Year, new { @class = "form-control", @type = "number", @maxLength = "10", @placeholder = "Enter publishing year" })
+				@Html.TextBoxFor(x => x.Year, new { @class = "form-control", @type = "number", @maxLength = "10", @placeholder = "შეიყვანეთ გამოცემის წელი" })
 				@Html.ValidationMessageFor(x => x.Year, null, new { @class = "text-danger" })
 			</div>
 
@@ -36,7 +36,7 @@
 				<div class="col-md-5" finput>
 					<br />
 					<label for="SelectedGenreIds">Genre</label>
-					@Html.ListBoxFor(x => x.SelectedGenreIds, new SelectList(ViewBag.GenreSelectList, "Value", "Text"), new { @class = "chosen-select form-control", @data_placeholder = "Choose genre" })
+					@Html.ListBoxFor(x => x.SelectedGenreIds, new SelectList(ViewBag.GenreSelectList, "Value", "Text"), new { @class = "chosen-select form-control", @data_placeholder = "აირჩიეთ ჟანრი" })
 					@Html.ValidationMessageFor(x => x.SelectedGenreIds, null, new { @class = "text-danger" })
 				</div>
 				<br />
@@ -46,7 +46,7 @@
 				<div class="col-md-5" finput>
 					<br />
 					<label for="SelectedAuthorIds">Author</label>
-					@Html.ListBoxFor(x => x.SelectedAuthorIds, new SelectList(ViewBag.AuthorSelectList, "Value", "Text"), new { @class = "chosen-select form-control", @data_placeholder = "Choose genre" })
+					@Html.ListBoxFor(x => x.SelectedAuthorIds, new SelectList(ViewBag.AuthorSelectList, "Value", "Text"), new { @class = "chosen-select form-control", @data_placeholder = "აირჩიეთ ავტორი" })
 					@Html.ValidationMessageFor(x => x.SelectedAuthorIds, null, new { @class = "text-danger" })
 				</div>
 				<br />
@@ -54,7 +54,7 @@
 
 
 			<div class="col-md-5">
-				<input type="submit" class="btn btn-primary" value="Save" />
+				<input type="submit" class="btn btn-primary" value="შენახვა" />
 			</div>
 		}
 	</div>

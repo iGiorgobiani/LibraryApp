@@ -1,0 +1,24 @@
+﻿.custom-file-upload {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    padding: 12px 24px; /* Adjust padding to fit your text */
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center; /* Center align the text */
+    font-size: 14px; /* Adjust font size */
+    line-height: 1.5; /* Adjust line height for vertical centering */
+    /* Optional: Add background and text color styles */
+    background-color: #007bff;
+    color: #fff;
+}
+
+    .custom-file-upload::before {
+        content: 'Custom Text'; /* Replace 'Custom Text' with your desired text */
+    }
+
+    .custom-file-upload:hover {
+        /* Optional: Change background color on hover */
+        background-color: #0056b3;
+    }

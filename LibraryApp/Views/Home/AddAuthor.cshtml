@@ -1,45 +1,50 @@
 ﻿@model LibraryApp.Models.Author.AddAuthorModel
 
+@* <link href="~/css/custom-file-upload.css" rel="stylesheet" />
+
+<script src="~/js/upload.js"></script> *@
 
 <div>
 	<div>
-		<h2>Add author form</h2>
+		<h2>ავტორის დამატება</h2>
 	</div>
 	<div>
 		@using (Html.BeginForm("AddAuthor", "Home", FormMethod.Post, new { enctype = "multipart/form-data"}))
 		{
-			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Image)
+			<div class="col-md-5 finput">
+				@Html.LabelFor(x => x.Image, "სურათი")
 				@Html.TextBoxFor(x => x.Image, new { @class = "form-control", @type = "file", @accept = "image/*" })
 				@Html.ValidationMessageFor(x => x.Image, null, new { @class = "text-danger" })
 			</div>
 
-			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Firstname)
-				@Html.TextBoxFor(x => x.Firstname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter firstname" })
+			<div class="col-md-5 finput">
+				@Html.LabelFor(x => x.Firstname, "სახელი")
+				@Html.TextBoxFor(x => x.Firstname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "შეიყვანეთ სახელი" })
 				@Html.ValidationMessageFor(x => x.Firstname, null, new { @class = "text-danger" })
 			</div>
 
-			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Lastname)
-				@Html.TextBoxFor(x => x.Lastname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter lastname" })
+			<div class="col-md-5 finput">
+				@Html.LabelFor(x => x.Lastname, "გვარი")
+				@Html.TextBoxFor(x => x.Lastname, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "შეიყვანეთ გვარი" })
 				@Html.ValidationMessageFor(x => x.Lastname, null, new { @class = "text-danger" })
 			</div>
 
-			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Birthdate)
+			<div class="col-md-5 finput">
+				@Html.LabelFor(x => x.Birthdate, "დაბადების თარიღი")
 				@Html.TextBoxFor(x => x.Birthdate, new { @class = "form-control", @type = "date", @placeholder = "DD/mm/yyyy" })
 				@Html.ValidationMessageFor(x => x.Birthdate, null, new { @class = "text-danger"})
 			</div>
 
-			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Cv)
+			<div class="col-md-5 finput">
+				@Html.LabelFor(x => x.Cv, "რეზიუმე")
+				<div class="custom-file-upload">
 				@Html.TextBoxFor(x => x.Cv, new { @class = "form-control", @type = "file", @accept = "application/pdf" })
 				@Html.ValidationMessageFor(x => x.Cv, null, new { @class = "text-danger" })
+				</div>
 			</div>
 
 			<div class="col-md-5">
-				<input type="submit" class="btn btn-primary" value="Save"/>
+				<input type="submit" class="btn btn-primary" value="შენახვა"/>
 			</div>
 		}
 	</div>

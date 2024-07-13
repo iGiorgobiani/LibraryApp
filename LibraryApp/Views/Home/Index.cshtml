@@ -19,21 +19,21 @@
 
 <div>
     <div>
-        <h2>Books</h2>
+        <h2>წიგნები</h2>
     </div>
     @using (Html.BeginForm("Index", "Home", FormMethod.Get))
     {
         <div class="d-flex">
             <div class="col-md-2">
-                @Html.LabelFor(x => x.Name)
+                @Html.LabelFor(x => x.Name, "წიგნის სახელი")
                 @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
             </div>
             <div class="col-md-2 filters">
-                @Html.LabelFor(x => x.Firstname)
+                @Html.LabelFor(x => x.Firstname, "ავტორის სახელი")
                 @Html.TextBoxFor(x => x.Firstname, new { @class = "form-control" })
             </div>
             <div class="col-md-2 filters">
-                @Html.LabelFor(x => x.Lastname)
+                @Html.LabelFor(x => x.Lastname, "ავტორის გვარი")
                 @Html.TextBoxFor(x => x.Lastname, new { @class = "form-control" })
             </div>
             <div class="col-md-2 filters filterBtn">
@@ -43,18 +43,18 @@
     }
     <br>
     <div>
-        <a type="button" class="btn btn-primary" href="@Url.Action("AddBook", "Home")">Add new item</a>
+        <a type="button" class="btn btn-primary" href="@Url.Action("AddBook", "Home")">ახალი წიგნის დამატება</a>
     </div>
     <br>
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Img</th>
+@*                 <th>სურათი</th> *@
                 <th>Id</th>
-                <th>Name</th>
-                <th>Publish Year</th>
-                <th>Genre</th>
-                <th>Authors</th>
+                <th>სახელი</th>
+                <th>გამოქვეყნების წელი</th>
+                <th>ჟანრი</th>
+                <th>ავტორები</th>
                 <th></th> 
             </tr>
         </thead>
@@ -62,9 +62,9 @@
             @foreach (var book in Model.Books)
             {
                 <tr>
-                    <td>
+@*                     <td>
                         
-                </td>
+                </td> *@
                     <td>@book.BookId</td>
                     <td>@book.Name</td>
                     <td>@book.Year</td>
@@ -94,10 +94,10 @@
                         }
                     </td>
                     <td>
-                        <a class="btn btn-primary" href="@Url.Action("EditBook", "Home", new { bookId = book.BookId} )">Edit</a>
+                        <a class="btn btn-primary" href="@Url.Action("EditBook", "Home", new { bookId = book.BookId} )">რედაქტირება</a>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-danger" data-bookid="@book.BookId" onclick="tryRemoveBook(this)">
-                            Delete
+                            წაშლა
                         </button>
                     </td>
                 </tr>

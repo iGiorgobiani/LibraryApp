@@ -19,40 +19,40 @@
 
 <div> 
 	<div>
-		<h2>Authors</h2>
+		<h2>ავტორები</h2>
 	</div>
     <div>
         @using (Html.BeginForm("Authors", "Home", FormMethod.Get))
         {
             <div class="d-flex">
                 <div class="col-md-2">
-                    @Html.LabelFor(x => x.Firstname)
+                    @Html.LabelFor(x => x.Firstname, "სახელი")
                     @Html.TextBoxFor(x => x.Firstname, new { @class = "form-control" })
                 </div>
                 <div class="col-md-2 filters">
-                    @Html.LabelFor(x => x.Lastname)
+                    @Html.LabelFor(x => x.Lastname, "გვარი")
                     @Html.TextBoxFor(x => x.Lastname, new { @class = "form-control" })
                 </div>
                 <div class="col-md-2 filters filterBtn">
-                    <input type="submit" class="btn btn-primary" value="Search" />
+                    <input type="submit" class="btn btn-primary" value="ძიება" />
                 </div>
             </div>
         }
         <br>
         <div>
-            <a type="button" class="btn btn-primary" href="@Url.Action("AddAuthor", "Home")">Add new item</a>
+            <a type="button" class="btn btn-primary" href="@Url.Action("AddAuthor", "Home")">ახალი ავტორის დამატება</a>
         </div>
         <br>
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th style="display:nan">Id</th>
-                    <th>Img</th>
-                    <th>Firstname</th>
-                    <th>Lastname</th>
-                    <th>Birthdate</th>
-                    <th>Booknumber</th>
-                    <th>Cv</th>
+                    <th>სურათი</th>
+                    <th>სახელი</th>
+                    <th>გვარი</th>
+                    <th>დაბ. თარიღი</th>
+                    <th>წიგნების რ-ბა</th>
+                    <th>რეზიუმე</th>
                     <th></th>
                 </tr>
             </thead>
@@ -68,10 +68,10 @@
                         <td>@author.Booknumber</td>
                         <td>@author.Cv</td>
                         <td>
-                            <a class="btn btn-primary" href="@Url.Action("EditAuthor", "Home", new { authorId = author.AuthorId} )">Edit</a>
+                            <a class="btn btn-primary" href="@Url.Action("EditAuthor", "Home", new { authorId = author.AuthorId} )">რედაქტირება</a>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-danger" data-authorid="@author.AuthorId" onclick="tryRemoveAuthor(this)">
-                                Delete
+                                წაშლა
                             </button>
                         </td>
                     </tr>

@@ -11,7 +11,7 @@
 
 <div>
 	<div>
-		<h2>Edit book</h2>
+		<h2>წიგნის რედაქტირება</h2>
 	</div>
 
 	<div>
@@ -20,27 +20,27 @@
 			@Html.HiddenFor(x => x.BookId)
 			<div class="col-md-5" finput>
 				@Html.LabelFor(x => x.Name)
-				@Html.TextBoxFor(x => x.Name, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter book name" })
+				@Html.TextBoxFor(x => x.Name, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "შეიყვანეთ წიგნის სახელი" })
 				@Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
 			</div>
 
-			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Year)
-				@Html.TextBoxFor(x => x.Year, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter year of publishing" })
+			<div class="col-md-5 finput">
+				@Html.LabelFor(x => x.Year, "გამოქვეყნების წელი")
+				@Html.TextBoxFor(x => x.Year, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "შეიყვანეთ გამოქვეყნების წელი" })
 				@Html.ValidationMessageFor(x => x.Year, null, new { @class = "text-danger" })
 			</div>
 
-			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Pages)
-				@Html.TextBoxFor(x => x.Pages, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "Enter amount of pages" })
+			<div class="col-md-5 finput">
+				@Html.LabelFor(x => x.Pages, "გვერდების რაოდენობა")
+				@Html.TextBoxFor(x => x.Pages, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "შეიყვანეთ გვერდების რაოდენობა" })
 				@Html.ValidationMessageFor(x => x.Pages, null, new { @class = "text-danger" })
 			</div>
 //GENRES
 			<div>
-				<div class="col-md-5" finput>
+				<div class="col-md-5 finput">
 					<br />
 					<label for="SelectedGenreIds">Genre</label>
-					@Html.ListBoxFor(x => x.SelectedGenreIds, (IEnumerable<SelectListItem>)ViewBag.GenreSelectList, new { @class = "chosen-select form-control", @data_placeholder = "Select to add" })
+					@Html.ListBoxFor(x => x.SelectedGenreIds, (IEnumerable<SelectListItem>)ViewBag.GenreSelectList, new { @class = "chosen-select form-control", @data_placeholder = "აირჩიეთ დასამატებლად" })
 					@Html.ValidationMessageFor(x => x.SelectedGenreIds, null, new { @class = "text-danger" })
 				</div>
 				<br />
@@ -54,10 +54,10 @@
 
 //AUTHORS
 			<div>
-				<div class="col-md-5" finput>
+				<div class="col-md-5 finput">
 					<br />
 					<label for="SelectedAuthorIds">Author</label>
-					@Html.ListBoxFor(x => x.SelectedAuthorIds, (IEnumerable<SelectListItem>)ViewBag.AuthorSelectList, new { @class = "chosen-select form-control", @data_placeholder = "Select to add" })
+					@Html.ListBoxFor(x => x.SelectedAuthorIds, (IEnumerable<SelectListItem>)ViewBag.AuthorSelectList, new { @class = "chosen-select form-control", @data_placeholder = "აირჩიეთ დასამატებლად" })
 					@Html.ValidationMessageFor(x => x.SelectedAuthorIds, null, new { @class = "text-danger" })
 				</div>
 				<br />
@@ -71,7 +71,7 @@
 
 //SUBMIT BUTTON
 			<div class="col-md-5">
-				<input type="submit" class="btn btn-primary" value="Update" />
+				<input type="submit" class="btn btn-primary" value="განახლება" />
 			</div>
 
 		}

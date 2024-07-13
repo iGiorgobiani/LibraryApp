@@ -19,7 +19,7 @@ namespace LibraryApp.Models.Author
 
 		public int Booknumber {  get; set; }
         
-        [AllowedMimeType("image/jpeg", "image/png", ErrorMessage = "Required types are jpg, jpeg, png")]
+        [AllowedMimeType("image/jpeg", "image/png", ErrorMessage = "ფაილის ფორმატი უნდა იყოს: jpg, jpeg, png")]
         public byte[]? ImageArray { get; set; }
     }
 }

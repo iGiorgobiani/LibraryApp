@@ -7,12 +7,14 @@ using X.PagedList;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using LibraryApp.Database;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryApp.Controllers
 {
+	[Authorize]
 	public class HomeController : Controller
 	{
-		private readonly string _imageDirectory = @"C:\\Users\\giorg_hudvewq\\source\\repos\\LibraryApp\\LibraryApp\\wwwroot\\Images\";
+		private readonly string _imageDirectory = @"C:\\Users\\giorg\\source\\repos\\LibraryApp\\LibraryApp\\wwwroot\\Images\";
 
 		public IActionResult Index(BookViewModel model, int? page)
 		{
@@ -136,12 +138,12 @@ namespace LibraryApp.Controllers
 				context.Books.Add(book);
 				context.SaveChanges();
 
-				TempData["Success"] = "Book has been added successfully";
+				TempData["Success"] = "წიგნი დაემატა წარმატებით";
 
 				return RedirectToAction("EditBook", new { bookId = book.BookId });
 			}
 
-			TempData["Error"] = "Book couldn't be added";
+			TempData["Error"] = "წიგნის დამატება ვერ მოხერხდა";
 
 			return View(model);
 		}
@@ -310,7 +312,7 @@ namespace LibraryApp.Controllers
 				}
 
 				context.SaveChanges();
-				TempData["Success"] = "Book has been edited successfully";
+				TempData["Success"] = "წიგნის რედაქტირება განხორციელდა წარმატებით";
 				return RedirectToAction("Index");
 			}
 			return View(model);
@@ -422,11 +424,11 @@ namespace LibraryApp.Controllers
 				context.Authors.Add(author);
 
 				context.SaveChanges();
-				TempData["Success"] = "Author has been added successfully";
+				TempData["Success"] = "ავტორი დაემატა წარმატებით";
 				//return RedirectToAction("Authors");
 				return RedirectToAction("EditAuthor", new { authorId = author.AuthorId});
 			}
-			TempData["Error"] = "Author couldn't be added";
+			TempData["Error"] = "ავტორის დამატება ვერ მოხერხდა";
 			return View(model);
 		}
 		//
@@ -495,10 +497,10 @@ namespace LibraryApp.Controllers
 				}
 
 				context.SaveChanges();
-				TempData["Success"] = "Author has been edited successfully";
+				TempData["Success"] = "ავტორის რედაქტირება განხორციელდა წარმატებით";
 				return RedirectToAction("EditAuthor", new { authorId = author.AuthorId });
 			}
-			TempData["Error"] = "Author couldn't be added";
+			TempData["Error"] = "ავტორის რედაქტირება ვერ განხორციელდა";
 			return View(model);
 		}
 
