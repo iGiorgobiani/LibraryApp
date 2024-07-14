@@ -20,9 +20,13 @@
 				</div>
 			}
 
-			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Image, "სურათი")
-				@Html.TextBoxFor(x => x.Image, new { @class = "form-control", @type = "file", @accept = "image/*" })
+
+			<div class="col-md-5 finput">
+				@Html.LabelFor(x => x.Image, "სურათი", new { @class = "control-label" })
+				<div class="file-input-wrapper">
+					@Html.TextBoxFor(x => x.Image, new { @class = "form-control-file", @type = "file", @accept = "image/*" })
+					<label class="file-input-label" for="Image">აირჩიეთ ფაილი</label>
+				</div>
 				@Html.ValidationMessageFor(x => x.Image, null, new { @class = "text-danger" })
 			</div>
 
@@ -40,14 +44,26 @@
 
 			<div class="col-md-5 finput">
 				@Html.LabelFor(x => x.Birthdate, "დაბადების თარიღი")
-				@Html.TextBoxFor(x => x.Birthdate, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+				@Html.TextBoxFor(x => x.Birthdate, "{0:dd/MM/yyyy}", new { @class = "datepicker", @type = "text", @placeholder = "dd/mm/yyyy" })
 @* 				@Html.TextBoxFor(x => x.Birthdate, new { @class = "form-control", @type = "date", @placeholder = "mm/DD/yyyy" }) *@
 				@Html.ValidationMessageFor(x => x.Birthdate, null, new { @class = "text-danger" })
 			</div>
 
+			<script>
+				@* 				// Initialize datepicker *@
+					$('.datepicker').datepicker({
+						format: 'dd/mm/yyyy',
+						autoclose: true,
+						todayHighlight: true,
+					});
+			</script>
+
 			<div class="col-md-5 finput">
-				@Html.LabelFor(x => x.Cv, "რეზიუმე")
-				@Html.TextBoxFor(x => x.Cv, new { @class = "form-control", @type = "file", @accept = "application/pdf" })
+				@Html.LabelFor(x => x.Cv, "რეზიუმე", new { @class = "control-label" })
+				<div class="file-input-wrapper">
+					@Html.TextBoxFor(x => x.Cv, new { @class = "form-control-file", @type = "file", @accept = "application/pdf" })
+					<label class="file-input-label" for="Image">აირჩიეთ ფაილი</label>
+				</div>
 				@Html.ValidationMessageFor(x => x.Cv, null, new { @class = "text-danger" })
 			</div>
 
@@ -60,7 +76,7 @@
 					@Html.ActionLink("Download Authors CVs", "DownloadFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken})
 				</div>
 			}
-			<div class="col-md-5 finput">
+			<div class="col-md-5 finput" style="padding-top: 30px;">
 				<input type="submit" class="btn btn-primary" value="განახლება" />
 			</div>
 		}

@@ -8,7 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="Babaganoush.Sitefinity" Version="2.1.0" />
+    <PackageReference Include="bootstrap" Version="5.3.3" />
     <PackageReference Include="bootstrap.chosen" Version="1.0.0" />
+    <PackageReference Include="Bootstrap.Datepicker" Version="1.8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />

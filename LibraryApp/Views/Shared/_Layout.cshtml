@@ -1,6 +1,12 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+        @using Microsoft.AspNetCore.Identity
+    @using LibraryApp.Areas.Identity.Data
+
+    @inject SignInManager<LibraryAppUser> SignInManager
+    @inject UserManager<LibraryAppUser> UserManager
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Library</title>
@@ -10,15 +16,17 @@
     <link href="~/css/mysite.css" rel="stylesheet" />
     <link href="~/css/alertify.css" rel="stylesheet" />
     <link href="~/css/alertify.min.css" rel="stylesheet" />
-    
+    <link href="~/css/datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/css/file-input-wrapper.css" rel="stylesheet" />
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="../Js/bootstrap-datepicker.js"></script>
     <script src="~/js/alertify.js"></script>
     <script src="~/js/alertify.min.js"></script>
-    
-    @using Microsoft.AspNetCore.Identity
-    @using LibraryApp.Areas.Identity.Data
 
-    @inject SignInManager<LibraryAppUser> SignInManager
-    @inject UserManager<LibraryAppUser> UserManager
+
+
 </head>
 <body>
     <header>

@@ -17,6 +17,7 @@ namespace LibraryApp.Models.Author
         public string? Lastname { get; set; }
 
         public DateTime? Birthdate { get; set; }
+
         [AllowedMimeType("application/pdf", ErrorMessage = "ფაილის ტიპი უნდა იყოს pdf")]
         public IFormFile? Cv { get; set; }
 
