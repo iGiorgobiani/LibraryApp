@@ -15,10 +15,10 @@ namespace LibraryApp.Models.Book
         public int? Year { get; set; }
 
         public virtual Genre? Genre { get; set; }
-
-        public List<int>? SelectedGenreIds { get; set; }
-
-        public List<int>? SelectedAuthorIds { get; set; }
+		[Required(ErrorMessage = "სავალდებულო ველი")]
+		public List<int>? SelectedGenreIds { get; set; }
+		[Required(ErrorMessage = "სავალდებულო ველი")]
+		public List<int>? SelectedAuthorIds { get; set; }
 
     }
 }

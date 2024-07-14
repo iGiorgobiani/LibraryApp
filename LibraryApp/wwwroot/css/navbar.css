@@ -1,0 +1,7 @@
+﻿.nav-item.active {
+    background-color: #007bff; /* Blue background color for active item */
+}
+
+.nav-link.active {
+    color: green; /* White text color for active link */
+}

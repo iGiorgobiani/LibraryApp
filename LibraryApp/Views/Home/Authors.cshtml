@@ -19,7 +19,7 @@
 
 <div> 
 	<div>
-		<h2>ავტორები</h2>
+		<h2 class="heading-box">ავტორები</h2>
 	</div>
     <div>
         @using (Html.BeginForm("Authors", "Home", FormMethod.Get))
@@ -46,7 +46,7 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th style="display:nan">Id</th>
+                    <th style="display: none">Id</th>
                     <th>სურათი</th>
                     <th>სახელი</th>
                     <th>გვარი</th>
@@ -60,11 +60,11 @@
                 @foreach (var author in Model.Authors)
                 {
                     <tr>
-                        <td style="display:nan">@author.AuthorId</td>
+                        <td style="display: none">@author.AuthorId</td>
                         <td><img style="height:50px ; margin:auto" src="data:image/jpg;base64,@Convert.ToBase64String(author.ImageArray, 0, author.ImageArray.Length)" /> </td>
                         <td>@author.Firstname</td>
                         <td>@author.Lastname</td>
-                        <td>@String.Format("{0: dd/MM/yyyy}", author.Birthdate)</td>
+                        <td>@String.Format("{0:dd/MM/yyyy}", author.Birthdate)</td>
                         <td>@author.Booknumber</td>
                         <td>@author.Cv</td>
                         <td>

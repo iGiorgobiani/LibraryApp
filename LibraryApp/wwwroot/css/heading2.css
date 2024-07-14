@@ -1,0 +1,11 @@
+﻿.heading-box {
+    display: block;
+    margin: 10px auto; /* Center the box horizontally */
+    padding: 20px;
+    color: black;
+    border: 3px dashed black;
+    width: 30%; /* Adjust width as needed */
+    box-sizing: border-box;
+    font-size: 3em; /* Double the text size */
+    text-align: center; /* Center align the text */
+}

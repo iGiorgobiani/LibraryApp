@@ -19,7 +19,7 @@
 
 <div>
     <div>
-        <h2>წიგნები</h2>
+        <h2 class="heading-box">წიგნები</h2>
     </div>
     @using (Html.BeginForm("Index", "Home", FormMethod.Get))
     {
@@ -50,7 +50,7 @@
         <thead>
             <tr>
 @*                 <th>სურათი</th> *@
-                <th>Id</th>
+                <th style="display: none">Id</th>
                 <th>სახელი</th>
                 <th>გამოქვეყნების წელი</th>
                 <th>ჟანრი</th>
@@ -65,7 +65,7 @@
 @*                     <td>
                         
                 </td> *@
-                    <td>@book.BookId</td>
+                    <td style="display: none">@book.BookId</td>
                     <td>@book.Name</td>
                     <td>@book.Year</td>
                     <td>
