@@ -54,7 +54,7 @@
 
 			<div class="col-md-5 finput">
 				@Html.LabelFor(x => x.Birthdate, "დაბადების თარიღი")
-				@Html.TextBoxFor(x => x.Birthdate, "{0:dd/MM/yyyy}", new { @class = "datepicker", @type = "text", @placeholder = "dd/mm/yyyy" })
+				@Html.TextBoxFor(x => x.Birthdate, "{0:dd/MM/yyyy}", new { @class = "datepicker", @type = "text", @placeholder = "დღე/თვე/წელი" })
 @* 				@Html.TextBoxFor(x => x.Birthdate, new { @class = "form-control", @type = "date", @placeholder = "mm/DD/yyyy" }) *@
 				@Html.ValidationMessageFor(x => x.Birthdate, null, new { @class = "text-danger" })
 			</div>
@@ -90,10 +90,10 @@
 			@if (Model.HasCv)
 			{
 				<div class="col-md-5 finput">
-					@Html.ActionLink("View Authors CVs", "ViewFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken}, new {@target = "_blank"})
+					@Html.ActionLink("ავტორის რეზიუმეს ნახვა", "ViewFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken}, new {@target = "_blank"})
 				</div>
 				<div class="col-md-5 finput">
-					@Html.ActionLink("Download Authors CVs", "DownloadFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken})
+					@Html.ActionLink("ავტორის რეზიუმეს გადმოწერა", "DownloadFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken})
 				</div>
 			}
 			<div class="col-md-5 finput" style="padding-top: 100px;">

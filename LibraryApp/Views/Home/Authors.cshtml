@@ -39,9 +39,12 @@
             </div>
         }
         <br>
-        <div>
-            <a type="button" class="btn btn-primary" href="@Url.Action("AddAuthor", "Home")">ახალი ავტორის დამატება</a>
+        @if (User.IsInRole("Admin"))
+        {
+            <div>
+                <a type="button" class="btn btn-primary" href="@Url.Action("AddAuthor", "Home")">ახალი ავტორის დამატება</a>
         </div>
+        }
         <br>
         <table class="table table-hover">
             <thead>
@@ -53,7 +56,14 @@
                     <th>დაბ. თარიღი</th>
                     <th>წიგნების რ-ბა</th>
                     <th>რეზიუმე</th>
-                    <th></th>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <th></th>
+                    }
+                    @if (User.IsInRole("Editor"))
+                    {
+                        <th></th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -66,7 +76,10 @@
                         <td>@author.Lastname</td>
                         <td>@String.Format("{0:dd/MM/yyyy}", author.Birthdate)</td>
                         <td>@author.Booknumber</td>
-                        <td>@author.Cv</td>
+                        <td>
+                            @Html.ActionLink("ავტორის რეზიუმეს ნახვა", "ViewFile", "Home", new { AuthorId = author.AuthorId, CvToken = author.Cv }, new { @target = "_blank" })</td>
+                        @if (User.IsInRole("Admin"))
+                        {
                         <td>
                             <a class="btn btn-primary" href="@Url.Action("EditAuthor", "Home", new { authorId = author.AuthorId} )">რედაქტირება</a>
                             <!-- Button trigger modal -->
@@ -74,6 +87,17 @@
                                 წაშლა
                             </button>
                         </td>
+                        }
+                        @if (User.IsInRole("Editor"))
+                        {
+                            <td>
+                                <a class="btn btn-primary" href="@Url.Action("EditAuthor", "Home", new { authorId = author.AuthorId} )">რედაქტირება</a>
+ @*                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-danger" data-authorid="@author.AuthorId" onclick="tryRemoveAuthor(this)">
+                                    წაშლა
+                                </button> *@
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>
@@ -98,15 +122,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Author</h5>
+                <h5 class="modal-title" id="exampleModalLabel">ავტორის წაშლა</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Do you want to delete author?
+                გსურთ ავტორის წაშლა?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                <button type="button" class="btn btn-primary" onclick="removeAuthor()" id="removeAuthor">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">არა</button>
+                <button type="button" class="btn btn-primary" onclick="removeAuthor()" id="removeAuthor">დიახ</button>
             </div>
         </div>
     </div>

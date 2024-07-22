@@ -21,13 +21,13 @@
 		{
 
 			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Name)
+				@Html.LabelFor(x => x.Name, "სახელი")
 				@Html.TextBoxFor(x => x.Name, new { @class = "form-control", @type = "text", @maxLength = "100", @placeholder = "შეიყვანეთ წიგნის სახელი" })
 				@Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
 			</div>
 
 			<div class="col-md-5" finput>
-				@Html.LabelFor(x => x.Year)
+				@Html.LabelFor(x => x.Year, "წელი")
 				@Html.TextBoxFor(x => x.Year, new { @class = "form-control", @type = "number", @maxLength = "10", @placeholder = "შეიყვანეთ გამოცემის წელი" })
 				@Html.ValidationMessageFor(x => x.Year, null, new { @class = "text-danger" })
 			</div>
@@ -35,7 +35,7 @@
 			<div>
 				<div class="col-md-5" finput>
 					<br />
-					<label for="SelectedGenreIds">Genre</label>
+					<label for="SelectedGenreIds">ჟანრი</label>
 					@Html.ListBoxFor(x => x.SelectedGenreIds, new SelectList(ViewBag.GenreSelectList, "Value", "Text"), new { @class = "chosen-select form-control", @data_placeholder = "აირჩიეთ ჟანრი" })
 					@Html.ValidationMessageFor(x => x.SelectedGenreIds, null, new { @class = "text-danger" })
 				</div>
@@ -45,7 +45,7 @@
 			<div>
 				<div class="col-md-5" finput>
 					<br />
-					<label for="SelectedAuthorIds">Author</label>
+					<label for="SelectedAuthorIds">ავტორი</label>
 					@Html.ListBoxFor(x => x.SelectedAuthorIds, new SelectList(ViewBag.AuthorSelectList, "Value", "Text"), new { @class = "chosen-select form-control", @data_placeholder = "აირჩიეთ ავტორი" })
 					@Html.ValidationMessageFor(x => x.SelectedAuthorIds, null, new { @class = "text-danger" })
 				</div>

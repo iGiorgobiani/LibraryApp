@@ -7,6 +7,7 @@ namespace LibraryApp.Models.Book
 	public class EditBookModel
 	{
 		public int BookId { get; set; }
+		[Required]
 		public string Name { get; set; } = null!;
 		public int? Pages { get; set; }
 		public int? Year { get; set; }

@@ -5,7 +5,7 @@
 @using X.PagedList.Web.Common
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "მთავარი";
 }
 
 <style>
@@ -37,14 +37,17 @@
                 @Html.TextBoxFor(x => x.Lastname, new { @class = "form-control" })
             </div>
             <div class="col-md-2 filters filterBtn">
-                <input type="submit" class="btn btn-primary" value="Search" />
+                <input type="submit" class="btn btn-primary" value="ძიება" />
             </div>
         </div>
     }
     <br>
-    <div>
-        <a type="button" class="btn btn-primary" href="@Url.Action("AddBook", "Home")">ახალი წიგნის დამატება</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <div>
+            <a type="button" class="btn btn-primary" href="@Url.Action("AddBook", "Home")">ახალი წიგნის დამატება</a>
     </div>
+    }
     <br>
     <table class="table table-hover">
         <thead>
@@ -55,7 +58,14 @@
                 <th>გამოქვეყნების წელი</th>
                 <th>ჟანრი</th>
                 <th>ავტორები</th>
-                <th></th> 
+                @if (User.IsInRole("Admin"))
+                    {
+                        <th></th> 
+                    }
+                @if (User.IsInRole("Editor"))
+                {
+                    <th></th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -93,6 +103,8 @@
                             </span>
                         }
                     </td>
+                    @if (User.IsInRole("Admin"))
+                    {
                     <td>
                         <a class="btn btn-primary" href="@Url.Action("EditBook", "Home", new { bookId = book.BookId} )">რედაქტირება</a>
                         <!-- Button trigger modal -->
@@ -100,6 +112,17 @@
                             წაშლა
                         </button>
                     </td>
+                    }
+                    @if (User.IsInRole("Editor"))
+                    {
+                        <td>
+                            <a class="btn btn-primary" href="@Url.Action("EditBook", "Home", new { bookId = book.BookId} )">რედაქტირება</a>
+                           @*  <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-danger" data-bookid="@book.BookId" onclick="tryRemoveBook(this)">
+                                წაშლა
+                            </button> *@
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
@@ -124,15 +147,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Book</h5>
+                <h5 class="modal-title" id="exampleModalLabel">წიგნის წაშლა</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Do you want to delete book?
+                გსურთ წიგნის წაშლა?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                <button type="button" class="btn btn-primary" onclick="removeBook()" id="removeBook">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">არა</button>
+                <button type="button" class="btn btn-primary" onclick="removeBook()" id="removeBook">დიახ</button>
             </div>
         </div>
     </div>

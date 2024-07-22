@@ -39,7 +39,7 @@
 			<div>
 				<div class="col-md-5 finput">
 					<br />
-					<label for="SelectedGenreIds">Genre</label>
+					<label for="SelectedGenreIds">ჟანრი</label>
 					@Html.ListBoxFor(x => x.SelectedGenreIds, (IEnumerable<SelectListItem>)ViewBag.GenreSelectList, new { @class = "chosen-select form-control", @data_placeholder = "აირჩიეთ დასამატებლად" })
 					@Html.ValidationMessageFor(x => x.SelectedGenreIds, null, new { @class = "text-danger" })
 				</div>
@@ -56,7 +56,7 @@
 			<div>
 				<div class="col-md-5 finput">
 					<br />
-					<label for="SelectedAuthorIds">Author</label>
+					<label for="SelectedAuthorIds">ავტორი</label>
 					@Html.ListBoxFor(x => x.SelectedAuthorIds, (IEnumerable<SelectListItem>)ViewBag.AuthorSelectList, new { @class = "chosen-select form-control", @data_placeholder = "აირჩიეთ დასამატებლად" })
 					@Html.ValidationMessageFor(x => x.SelectedAuthorIds, null, new { @class = "text-danger" })
 				</div>

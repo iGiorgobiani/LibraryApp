@@ -16,6 +16,7 @@ namespace LibraryApp.Controllers
 	{
 		private readonly string _imageDirectory = @"C:\\Users\\giorg\\source\\repos\\LibraryApp\\LibraryApp\\wwwroot\\Images\";
 
+		[AllowAnonymous]
 		public IActionResult Index(BookViewModel model, int? page)
 		{
 			LibraryContext context = new LibraryContext();
@@ -83,6 +84,7 @@ namespace LibraryApp.Controllers
 
 		}
 
+		[Authorize (Roles = "Admin")]
 		public IActionResult AddBook()
 		{
 			LibraryContext context = new LibraryContext();
@@ -94,7 +96,8 @@ namespace LibraryApp.Controllers
 
 
 		[HttpPost]
-		public IActionResult AddBook(AddBookModel model)
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddBook(AddBookModel model)
 		{
 			LibraryContext context = new LibraryContext();
 
@@ -148,8 +151,9 @@ namespace LibraryApp.Controllers
 			return View(model);
 		}
 
-		//
-		public IActionResult EditBook(int bookId)
+        //
+        [Authorize(Roles = "Admin, Editor")]
+        public IActionResult EditBook(int bookId)
 		{
 			LibraryContext context = new LibraryContext();
 
@@ -236,7 +240,8 @@ namespace LibraryApp.Controllers
 
 
 		[HttpPost]
-		public IActionResult EditBook(EditBookModel model)
+        [Authorize(Roles = "Admin, Editor")]
+        public IActionResult EditBook(EditBookModel model)
 		{
 			LibraryContext context = new LibraryContext();
 
@@ -318,8 +323,8 @@ namespace LibraryApp.Controllers
 			return View(model);
 		}
 
-
-		public IActionResult RemoveBook(int bookId, string returnUrl)
+        [Authorize(Roles = "Admin")]
+        public IActionResult RemoveBook(int bookId, string returnUrl)
 		{
 			LibraryContext context = new LibraryContext();
 
@@ -376,14 +381,16 @@ namespace LibraryApp.Controllers
 			return View(model);
 		}
 
-		public IActionResult AddAuthor()
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddAuthor()
 		{
 
 			return View();
 		}
 
 		[HttpPost]
-		public IActionResult AddAuthor(AddAuthorModel model)
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddAuthor(AddAuthorModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -431,8 +438,9 @@ namespace LibraryApp.Controllers
 			TempData["Error"] = "ავტორის დამატება ვერ მოხერხდა";
 			return View(model);
 		}
-		//
-		public IActionResult EditAuthor(int authorId)
+        //
+        [Authorize(Roles = "Admin, Editor")]
+        public IActionResult EditAuthor(int authorId)
 		{
 			LibraryContext context = new LibraryContext();
 			if (context.Authors.Any(x => x.AuthorId == authorId))
@@ -458,7 +466,8 @@ namespace LibraryApp.Controllers
 
 		}
 		[HttpPost]
-		public IActionResult EditAuthor(EditAuthorModel model)
+        [Authorize(Roles = "Admin, Editor")]
+        public IActionResult EditAuthor(EditAuthorModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -504,7 +513,8 @@ namespace LibraryApp.Controllers
 			return View(model);
 		}
 
-		public IActionResult RemoveAuthor(int authorId)
+        [Authorize(Roles = "Admin")]
+        public IActionResult RemoveAuthor(int authorId)
 		{
 
 			LibraryContext context = new LibraryContext();
@@ -519,7 +529,8 @@ namespace LibraryApp.Controllers
 			return RedirectToAction("Authors");
 		}
 
-		public IActionResult ViewFile(int authorId, string cvToken)
+        [Authorize(Roles = "Admin, Editor")]
+        public IActionResult ViewFile(int authorId, string cvToken)
 		{
 
 			LibraryContext context = new LibraryContext();
@@ -543,7 +554,8 @@ namespace LibraryApp.Controllers
 
         }
 
-		public IActionResult DownloadFile(int authorId, string cvToken)
+        [Authorize(Roles = "Admin, Editor")]
+        public IActionResult DownloadFile(int authorId, string cvToken)
 		{
 
 			LibraryContext context = new LibraryContext();

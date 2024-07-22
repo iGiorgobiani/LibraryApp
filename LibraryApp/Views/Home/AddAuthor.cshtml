@@ -41,7 +41,7 @@
 
 			<div class="col-md-5 finput"> <!--Birthday-->
 				@Html.LabelFor(x => x.Birthdate, "დაბადების თარიღი")
-				@Html.TextBoxFor(x => x.Birthdate, new { @class = "datepicker", @type = "text", @placeholder = "dd/mm/yyyy" })
+				@Html.TextBoxFor(x => x.Birthdate, new { @class = "datepicker", @type = "text", @placeholder = "დღე/თვე/წელი" })
 				@Html.ValidationMessageFor(x => x.Birthdate, null, new { @class = "text-danger" })
 			</div>
 
