@@ -1,0 +1,24 @@
+﻿
+table {
+    width: 50%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+.editable {
+    display: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.filters {
+    margin-left: 20px;
+}
+
+.filterBtn {
+    margin-top: 24px;
+}

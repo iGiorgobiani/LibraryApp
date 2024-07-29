@@ -323,6 +323,23 @@ namespace LibraryApp.Controllers
 			return View(model);
 		}
 
+		public IActionResult UpdateName(UpdateNameModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				LibraryContext context = new LibraryContext();
+				var book = context.Books.SingleOrDefault(x => x.BookId == model.BookId);
+				if (book is null)
+					return Json(new { value = false, msg = "წიგნი არ მოიძებნა" });
+
+				book.Name = model.Name;
+				context.SaveChanges();
+
+				return Json(new { value = true, msg = "წიგნის სახელი წარმატებით განახლდა" });
+			}
+            return Json(new { value = false, msg = "წიგნის სახელის განახლებისას დაფიქსირდა შეცდომა" });
+        }
+
         [Authorize(Roles = "Admin")]
         public IActionResult RemoveBook(int bookId, string returnUrl)
 		{

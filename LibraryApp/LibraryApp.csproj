@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\Inline-Edit.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Babaganoush.Sitefinity" Version="2.1.0" />
     <PackageReference Include="bootstrap" Version="5.3.3" />
     <PackageReference Include="bootstrap.chosen" Version="1.0.0" />
