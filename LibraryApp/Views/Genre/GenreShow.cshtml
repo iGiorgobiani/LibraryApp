@@ -1,0 +1,121 @@
+﻿@model Model.Genre.GenreShowModel;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Mvc.Core.Fluent
+@* @using X.PagedList.Web.Common *@
+
+
+
+
+<style>
+    .filters {
+        margin-left: 20px;
+    }
+
+    .filterBtn {
+        margin-top: 24px;
+    }
+</style>
+
+<div>
+    <div>
+        <h2 class="heading-box">ჟანრები</h2>
+    </div>
+    <div>
+        @using (Html.BeginForm("GenreShow", "Genre", FormMethod.Get))
+        {
+            <div class="d-flex">
+                <div class="col-md-2">
+                    @Html.LabelFor(x => x.Name, "სახელი")
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 filters filterBtn">
+                    <input type="submit" class="btn btn-primary" value="ძიება" />
+                </div>
+            </div>
+        }
+        <br>
+        <br>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    @* <th style="display: none">Id</th> *@
+                    <th style="display: none">Id</th>
+                    <th>სახელი</th>
+                    <th></th>
+            </thead>
+            <tbody>
+                @foreach (var genre in Model.Genres)
+                {
+                    <tr>
+                        <td style="display: none">@genre.Id</td>
+                        <td>@genre.Name</td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <td>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-danger" data-genreid="@genre.Id" onclick="tryRemoveGenre(this)">
+                                    წაშლა
+                                </button>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+                <div class="d-flex" style="justify-content: space-between;">
+        <div class="registry-paging jacob">
+                @Html.PagedListPager(Model.Genres, page => Url.Action("GenreShow", new { Model.Id, Model.Name, page }), new PagedListRenderOptions { LiElementClasses = new string[] { "page-item" }, PageClasses = new string[] { "page-link" }, ActiveLiElementClass = "active-link-cl" })
+        </div>
+        <div style="margin-top: 50px; margin-right: 35px;">
+            <h5>სულ : @Model.Total</h5>
+        </div>
+    </div>
+
+
+</div>
+</div>
+
+<!-- data-bs-toggle="modal" data-bs-target="#deleteModal -->
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ჟანრის წაშლა</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                გსურთ ჟანრის წაშლა?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">არა</button>
+                <button type="button" class="btn btn-primary" onclick="removeGenre()" id="removeGenre">დიახ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    let removeGenreId = 0;
+
+    let tryRemoveGenre = (element) => {
+        removeGenreId = element.dataset.genreid;
+        let deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'), {
+            keyboard: false
+        })
+        deleteModal.show();
+    };
+    let removeGenre = () => {
+        if (removeGenreId == 0) {
+            alert("Can't remove item");
+            return;
+        }
+
+        let newUrl = '@Url.Action("RemoveGenre", "Home")' + '?GenreId=' + removeGenreId;
+        window.location.href = newUrl;
+    }
+
+</script>
