@@ -42,7 +42,7 @@
         @if (User.IsInRole("Admin"))
         {
             <div>
-                <a type="button" class="btn btn-primary" href="@Url.Action("AddAuthor", "Home")">ახალი ავტორის დამატება</a>
+                <a type="button" class="btn btn-primary" href="@Url.Action("AddAuthor", "Author")">ახალი ავტორის დამატება</a>
         </div>
         }
         <br>
@@ -77,11 +77,11 @@
                         <td>@String.Format("{0:dd/MM/yyyy}", author.Birthdate)</td>
                         <td>@author.Booknumber</td>
                         <td>
-                            @Html.ActionLink("ავტორის რეზიუმეს ნახვა", "ViewFile", "Home", new { AuthorId = author.AuthorId, CvToken = author.Cv }, new { @target = "_blank" })</td>
+                            @Html.ActionLink("ავტორის რეზიუმეს ნახვა", "ViewFile", "Author", new { AuthorId = author.AuthorId, CvToken = author.Cv }, new { @target = "_blank" })</td>
                         @if (User.IsInRole("Admin"))
                         {
                         <td>
-                            <a class="btn btn-primary" href="@Url.Action("EditAuthor", "Home", new { authorId = author.AuthorId} )">რედაქტირება</a>
+                            <a class="btn btn-primary" href="@Url.Action("EditAuthor", "Author", new { authorId = author.AuthorId} )">რედაქტირება</a>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-danger" data-authorid="@author.AuthorId" onclick="tryRemoveAuthor(this)">
                                 წაშლა
@@ -91,7 +91,7 @@
                         @if (User.IsInRole("Editor"))
                         {
                             <td>
-                                <a class="btn btn-primary" href="@Url.Action("EditAuthor", "Home", new { authorId = author.AuthorId} )">რედაქტირება</a>
+                                <a class="btn btn-primary" href="@Url.Action("EditAuthor", "Author", new { authorId = author.AuthorId} )">რედაქტირება</a>
  @*                                <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-danger" data-authorid="@author.AuthorId" onclick="tryRemoveAuthor(this)">
                                     წაშლა
@@ -154,7 +154,7 @@
             return;
         }
         
-        let newUrl = '@Url.Action("RemoveAuthor", "Home")' + '?AuthorId=' + removeAuthorId;
+        let newUrl = '@Url.Action("RemoveAuthor", "Author")' + '?AuthorId=' + removeAuthorId;
         window.location.href = newUrl;
     }
 

@@ -1,58 +1,79 @@
-﻿using DataAccess.EF;
+﻿using BusinessLogic.IServices;
+using DataAccess.EF;
+using Model.Author;
 using Model.Book;
 
 namespace LibraryApp.Controllers
 {
     public class BookController : Controller
     {
-        [AllowAnonymous]
+        private readonly IBookService _bookService;
+        public BookController(IBookService bookService)
+        {
+            _bookService = bookService;
+        }
+
         public IActionResult Books(BookViewModel model, int? page)
         {
-            LibraryContext context = new LibraryContext();
+            var resultModel = _bookService.GetBooks(model, page);
 
-            var queryResult = context.Books
-                .Include(x => x.BookGenres)
-                .ThenInclude(x => x.Genre)
-                .Include(x => x.BookAuthors)
-                .ThenInclude(x => x.Author)
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(model.Name))
-            {
-                queryResult = queryResult.Where(x => x.Name.Contains(model.Name));
-            }
-
-            if (!string.IsNullOrEmpty(model.Firstname))
-            {
-                queryResult = queryResult.Where(x => x.BookAuthors.Any(a => a.Author.Firstname.Contains(model.Firstname)));
-            }
-
-            if (!string.IsNullOrEmpty(model.Lastname))
-            {
-                queryResult = queryResult.Where(x => x.BookAuthors.Any(a => a.Author.Lastname.Contains(model.Lastname)));
-            }
-
-            int pageNumber = page ?? 1;
-            int numberOfItemsPerPage = 10;
-            model.Total = queryResult.Count();
-
-            model.Books = queryResult.Select(x => new BookListItem()
-            {
-                BookId = x.BookId,
-                Name = x.Name,
-                Year = x.Year,
-                Genres = x.BookGenres.Select(g => new GenreViewModel()
-                {
-                    Name = g.Genre.Name
-                }).ToList(),
-                Authors = x.BookAuthors.Select(a => new AuthorViewModel()
-                {
-                    Firstname = a.Author.Firstname,
-                    Lastname = a.Author.Lastname
-                }).ToList()
-            }).OrderByDescending(x => x.Name).ToPagedList(pageNumber, numberOfItemsPerPage);
-            return View(model);
+            return View(resultModel);
         }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddBook()
+        {
+
+            return View();
+        }
+
+        //public IActionResult Books(BookViewModel model, int? page)
+        //{
+        //    LibraryContext context = new LibraryContext();
+
+        //    var queryResult = context.Books
+        //        .Include(x => x.BookGenres)
+        //        .ThenInclude(x => x.Genre)
+        //        .Include(x => x.BookAuthors)
+        //        .ThenInclude(x => x.Author)
+        //        .AsQueryable();
+
+        //    if (!string.IsNullOrEmpty(model.Name))
+        //    {
+        //        queryResult = queryResult.Where(x => x.Name.Contains(model.Name));
+        //    }
+
+        //    if (!string.IsNullOrEmpty(model.Firstname))
+        //    {
+        //        queryResult = queryResult.Where(x => x.BookAuthors.Any(a => a.Author.Firstname.Contains(model.Firstname)));
+        //    }
+
+        //    if (!string.IsNullOrEmpty(model.Lastname))
+        //    {
+        //        queryResult = queryResult.Where(x => x.BookAuthors.Any(a => a.Author.Lastname.Contains(model.Lastname)));
+        //    }
+
+        //    int pageNumber = page ?? 1;
+        //    int numberOfItemsPerPage = 10;
+        //    model.Total = queryResult.Count();
+
+        //    model.Books = queryResult.Select(x => new BookListItem()
+        //    {
+        //        BookId = x.BookId,
+        //        Name = x.Name,
+        //        Year = x.Year,
+        //        Genres = x.BookGenres.Select(g => new GenreViewModel()
+        //        {
+        //            Name = g.Genre.Name
+        //        }).ToList(),
+        //        Authors = x.BookAuthors.Select(a => new AuthorViewModel()
+        //        {
+        //            Firstname = a.Author.Firstname,
+        //            Lastname = a.Author.Lastname
+        //        }).ToList()
+        //    }).OrderByDescending(x => x.Name).ToPagedList(pageNumber, numberOfItemsPerPage);
+        //    return View(model);
+        //}
 
         private void InitializeAddBook(LibraryContext context)
         {
@@ -73,15 +94,15 @@ namespace LibraryApp.Controllers
 
         }
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult AddBook()
-        {
-            LibraryContext context = new LibraryContext();
+        //[Authorize(Roles = "Admin")]
+        //public IActionResult AddBook()
+        //{
+        //    LibraryContext context = new LibraryContext();
 
-            InitializeAddBook(context);
+        //    InitializeAddBook(context);
 
-            return View();
-        }
+        //    return View();
+        //}
 
 
         [HttpPost]

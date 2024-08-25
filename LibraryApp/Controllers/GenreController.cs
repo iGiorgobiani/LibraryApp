@@ -1,39 +1,27 @@
-﻿using DataAccess.EF;
+﻿using BusinessLogic.IServices;
+using DataAccess.EF;
+using Model.Author;
 using Model.Genre;
 
 namespace LibraryApp.Controllers
 {
     public class GenreController : Controller
     {
-
-        public IActionResult GenreShow(GenreShowModel model, int? page)
-        {
-            LibraryContext context = new LibraryContext();
-
-            var queryResult = context.Genres
-                .Include(x => x.BookGenres)
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(model.Name))
+            private readonly IGenreService _genreService;
+            public GenreController(IGenreService genreService)
             {
-                queryResult = queryResult.Where(x => x.Name.Contains(model.Name));
+                _genreService = genreService;
             }
 
-            int pageNumber = page ?? 1;
-            int numberOfItemsPerPage = 10;
-            model.Total = queryResult.Count();
-
-            model.Genres = queryResult.Select(x => new GenreListItem()
+            public IActionResult GenreShow(GenreShowModel model, int? page)
             {
-                Id = x.GenreId,
-                Name = x.Name
-            }).OrderByDescending(x => x.Id).ToPagedList(pageNumber, numberOfItemsPerPage);
+                var resultModel = _genreService.GenreShow(model, page);
+
+                return View(resultModel);
+            }
 
 
-            return View(model);
-        }
-
-        public IActionResult RemoveGenre(int genreId)
+            public IActionResult RemoveGenre(int genreId)
         {
 
             LibraryContext context = new LibraryContext();

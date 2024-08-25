@@ -4,6 +4,7 @@ using BusinessLogic.Services;
 using LibraryApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Model.Author;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
@@ -23,6 +24,10 @@ CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IAuthorService, AuthorService>();
+
+builder.Services.AddScoped<IBookService, BookService>();
+
+builder.Services.AddScoped<IGenreService, GenreService>();
 
 var app = builder.Build();
 

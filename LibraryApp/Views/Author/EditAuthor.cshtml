@@ -90,10 +90,10 @@
 			@if (Model.HasCv)
 			{
 				<div class="col-md-5 finput">
-					@Html.ActionLink("ავტორის რეზიუმეს ნახვა", "ViewFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken}, new {@target = "_blank"})
+					@Html.ActionLink("ავტორის რეზიუმეს ნახვა", "ViewFile", "Author", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken}, new {@target = "_blank"})
 				</div>
 				<div class="col-md-5 finput">
-					@Html.ActionLink("ავტორის რეზიუმეს გადმოწერა", "DownloadFile", "Home", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken})
+					@Html.ActionLink("ავტორის რეზიუმეს გადმოწერა", "DownloadFile", "Author", new {AuthorId = Model.AuthorId, CvToken = Model.CvToken})
 				</div>
 			}
 			<div class="col-md-5 finput" style="padding-top: 100px;">
